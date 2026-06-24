@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=5, minimum-scale=1">
+  <title>Kalari Studio</title>
+  <meta name="description" content="Kalari Studio — Debut Exhibition">
+  <meta name="author" content="Kalari Studio">
+  <meta property="og:title" content="Kalari Studio">
+  <meta property="og:description" content="Kalari Studio — Debut Exhibition">
+  <meta property="og:type" content="website">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ── PRELOADER ─────────────────────────────────────────── -->
+<div id="preloader">
+  <div class="preloader-marquee top">
+    <!-- repeated text fills the bar -->
+    <div class="inner">
+      KALARI &nbsp; KALARI &nbsp; KALARI &nbsp; KALARI &nbsp; KALARI &nbsp;
+      KALARI &nbsp; KALARI &nbsp; KALARI &nbsp; KALARI &nbsp; KALARI &nbsp;
+      KALARI &nbsp; KALARI &nbsp; KALARI &nbsp; KALARI &nbsp; KALARI &nbsp;
+      KALARI &nbsp; KALARI &nbsp; KALARI &nbsp; KALARI &nbsp; KALARI &nbsp;
+      KALARI &nbsp; KALARI &nbsp; KALARI &nbsp; KALARI &nbsp; KALARI &nbsp;
+      KALARI &nbsp; KALARI &nbsp; KALARI &nbsp; KALARI &nbsp; KALARI &nbsp;
+    </div>
+    <div class="inner" aria-hidden="true">
+      KALARI &nbsp; KALARI &nbsp; KALARI &nbsp; KALARI &nbsp; KALARI &nbsp;
+      KALARI &nbsp; KALARI &nbsp; KALARI &nbsp; KALARI &nbsp; KALARI &nbsp;
+      KALARI &nbsp; KALARI &nbsp; KALARI &nbsp; KALARI &nbsp; KALARI &nbsp;
+      KALARI &nbsp; KALARI &nbsp; KALARI &nbsp; KALARI &nbsp; KALARI &nbsp;
+    </div>
+  </div>
+
+  <div class="preloader-middle">
+    <!--
+      Replace with your actual logo:
+      <img src="public/img/logo.svg" alt="Kalari Studio" style="max-width:180px; margin-bottom:.7em;">
+    -->
+    <p class="brand-name">Kalari</p>
+    <p class="brand-sub">कलारी स्टूडियो</p>
+  </div>
+
+  <div class="preloader-marquee bottom reverse">
+    <div class="inner">
+      STUDIO &nbsp; STUDIO &nbsp; STUDIO &nbsp; STUDIO &nbsp; STUDIO &nbsp;
+      STUDIO &nbsp; STUDIO &nbsp; STUDIO &nbsp; STUDIO &nbsp; STUDIO &nbsp;
+      STUDIO &nbsp; STUDIO &nbsp; STUDIO &nbsp; STUDIO &nbsp; STUDIO &nbsp;
+      STUDIO &nbsp; STUDIO &nbsp; STUDIO &nbsp; STUDIO &nbsp; STUDIO &nbsp;
+      STUDIO &nbsp; STUDIO &nbsp; STUDIO &nbsp; STUDIO &nbsp; STUDIO &nbsp;
+      STUDIO &nbsp; STUDIO &nbsp; STUDIO &nbsp; STUDIO &nbsp; STUDIO &nbsp;
+    </div>
+    <div class="inner" aria-hidden="true">
+      STUDIO &nbsp; STUDIO &nbsp; STUDIO &nbsp; STUDIO &nbsp; STUDIO &nbsp;
+      STUDIO &nbsp; STUDIO &nbsp; STUDIO &nbsp; STUDIO &nbsp; STUDIO &nbsp;
+      STUDIO &nbsp; STUDIO &nbsp; STUDIO &nbsp; STUDIO &nbsp; STUDIO &nbsp;
+      STUDIO &nbsp; STUDIO &nbsp; STUDIO &nbsp; STUDIO &nbsp; STUDIO &nbsp;
+    </div>
+  </div>
+</div>
+
+<!-- ── CURSOR BLOB ────────────────────────────────────────── -->
+<div id="blob-container" aria-hidden="true">
+  <div class="blob">
+    <!--
+      The blob shows your hero image through a circular lens.
+      Replace the background-image URL in .blob-display (style.css)
+      with your actual image: public/img/hero-bg.jpg
+    -->
+    <div class="blob-display"></div>
+  </div>
+</div>
+
+<!-- ── MAIN PAGE ──────────────────────────────────────────── -->
+<main class="page-content">
+
+  <!-- LOCKUP: hero headline -->
+  <section class="section-lockup lockup-container">
+    <h1 class="size-58">
+      <!--
+        Edit these three lines:
+        Line 1 → your brand name in Latin script
+        Line 2 → exhibition / event title
+        Line 3 → Hindi or Punjabi translation
+      -->
+      <span>Kalari Studio</span>
+      <span>DEBUT EXHIBITION</span>
+      <span class="devanagari">कलारी स्टूडियो की पहली प्रदर्शनी</span>
+    </h1>
+    <p class="size-20">
+      Kalari Studio's debut solo exhibition. Come move, feel, and be transformed.
+    </p>
+  </section>
+
+  <!-- TIME BAR: sticky event date -->
+  <div class="section-time time-container">
+    <span class="size-16 time-el bg-black color-white">
+      <!--
+        Replace with your actual opening date and time:
+      -->
+      Public opening: [DATE], [TIME]
+    </span>
+  </div>
+
+  <!-- SIGNUP: RSVP email form -->
+  <div class="section-signup signup-container">
+    <form id="rsvp-form" class="signup-form">
+      <label class="field-label size-26">
+        <span class="field-label-title">Enter your e-mail</span>
+        <div class="input-wrap std-border">
+          <input type="email" name="email" placeholder="you@example.com" required>
+        </div>
+      </label>
+      <button type="submit" class="submit-btn std-border">
+        <span class="inner">
+          <span class="inner-primary">RSVP</span>
+          <span>--&gt;</span>
+        </span>
+      </button>
+    </form>
+  </div>
+
+  <!-- LOGO: top-right corner mark -->
+  <div class="section-logo logo-container">
+    <a href="#" class="hover-effect-parent logo-mark std-border" aria-label="Kalari Studio">
+      <!--
+        Replace this SVG with your actual logo mark.
+        Keep it roughly square — it sits in a fixed-size box.
+        Or use: <img src="public/img/logo.svg" alt="Kalari Studio">
+      -->
+      <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Placeholder: stylised "K" -->
+        <text x="4" y="32" font-family="Inter,sans-serif" font-weight="900"
+              font-size="34" fill="currentColor">K</text>
+      </svg>
+      <p class="logo-text">Studio</p>
+    </a>
+  </div>
+
+  <!-- BANNER: scrolling address -->
+  <div class="section-banner banner-container bg-hover size-30">
+    <div class="banner-track">
+      <!--
+        Replace with your venue address (repeated 3× for seamless scroll):
+      -->
+      <span>[Your Venue Name], [City, Country] &nbsp; / &nbsp;</span>
+      <span>[Your Venue Name], [City, Country] &nbsp; / &nbsp;</span>
+      <span>[Your Venue Name], [City, Country] &nbsp; / &nbsp;</span>
+      <span>[Your Venue Name], [City, Country] &nbsp; / &nbsp;</span>
+      <span>[Your Venue Name], [City, Country] &nbsp; / &nbsp;</span>
+      <span>[Your Venue Name], [City, Country] &nbsp; / &nbsp;</span>
+    </div>
+  </div>
+
+  <!-- INFO: opening callout + venue card -->
+  <section class="section-info info-container">
+    <span class="info-callout size-30-58">
+      <!--
+        Replace with your event dates and Hindi/Punjabi text:
+      -->
+      <span>OPENS [MONTH] [DAY]</span>
+      <span>[YEAR] · कलारी स्टूडियो</span>
+      <span>प्रदर्शनी शुरू होती है।</span>
+    </span>
+    <!--
+      Replace href with your venue's website:
+    -->
+    <a href="#" target="_blank" rel="noopener" class="info-details-wrapper hover-effect-parent">
+      <span class="info-details hover-effect std-border">
+        <span class="info-details-title size-34">[Venue Name]</span>
+        <span class="info-details-subtitle size-20">[Full Address, City, Country]</span>
+      </span>
+    </a>
+  </section>
+
+  <!-- VIDEO: autoplay looping clip -->
+  <div class="section-video video-container">
+    <div class="video-media">
+      <!--
+        Replace src with your video file: public/video/hero.mp4
+        Keep autoplay muted loop playsinline for silent autoplay.
+        The placeholder div shows until the video loads / if no video.
+      -->
+      <video
+        playsinline muted loop autoplay
+        src="public/video/hero.mp4"
+        onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+      ></video>
+      <div class="video-placeholder" style="display:none;"></div>
+
+      <!--
+        Replace with your studio wordmark SVG or an <img> tag.
+        This floats over the video with a neon-flicker glow effect.
+      -->
+      <svg viewBox="0 0 400 50" class="venue-wordmark" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <text x="10" y="40"
+              font-family="Inter,sans-serif"
+              font-weight="800"
+              font-size="38"
+              letter-spacing="-1"
+              fill="white">KALARI STUDIO</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- SHOP: gift shop grid -->
+  <section class="section-shop shop-container">
+
+    <!-- Left label -->
+    <div class="shop-left">
+      <h2 class="size-40 color-white">
+        <span>Gift<br>Shop</span>
+        <span class="shop-label">Exit</span>
+      </h2>
+    </div>
+
+    <!-- Animated arrows -->
+    <div class="shop-arrows">
+      <div class="arrows-track">
+        <span class="arrows-track-item color-white">--&gt;</span>
+        <span class="arrows-track-item color-white">--&gt;</span>
+        <span class="arrows-track-item color-white">--&gt;</span>
+        <span class="arrows-track-item color-white">--&gt;</span>
+        <span class="arrows-track-item color-white">--&gt;</span>
+        <span class="arrows-track-item color-white">--&gt;</span>
+      </div>
+      <span class="arrows-title size-20 color-white">Kalari Studio</span>
+    </div>
+
+    <!-- Product tiles -->
+    <div class="shop-items">
+      <div class="items-inner">
+
+        <!--
+          PRODUCT TILE — repeat for each product (up to 5).
+          For products with a Shopify/external link use <a href="..." target="_blank">.
+          For products with size variants keep as <button>.
+          Replace:
+            data-shop-item → unique id matching main.js items array
+            .tile-image img src → your product image (public/img/shop/item1.png)
+            .tile-info-text → product name
+        -->
+
+        <button class="tile hover-effect-solo btn-reset" data-shop-item="item-1">
+          <span class="tile-image">
+            <!--
+              Replace src with your image path.
+              If no image yet, remove the <img> and the placeholder div will show.
+            -->
+            <div class="tile-image-placeholder"></div>
+          </span>
+          <span class="tile-info size-20">
+            <span class="tile-info-text">Kalari Long Sleeve</span>
+            <span>--&gt;</span>
+          </span>
+        </button>
+
+        <button class="tile hover-effect-solo btn-reset" data-shop-item="item-2">
+          <span class="tile-image">
+            <div class="tile-image-placeholder"></div>
+          </span>
+          <span class="tile-info size-20">
+            <span class="tile-info-text">Kalari Tee</span>
+            <span>--&gt;</span>
+          </span>
+        </button>
+
+        <button class="tile hover-effect-solo btn-reset" data-shop-item="item-3">
+          <span class="tile-banner size-16">Limited!</span>
+          <span class="tile-image">
+            <div class="tile-image-placeholder"></div>
+          </span>
+          <span class="tile-info size-20">
+            <span class="tile-info-text">Studio Hoodie</span>
+            <span>--&gt;</span>
+          </span>
+        </button>
+
+        <button class="tile hover-effect-solo btn-reset" data-shop-item="item-4">
+          <span class="tile-image">
+            <div class="tile-image-placeholder"></div>
+          </span>
+          <span class="tile-info size-20">
+            <span class="tile-info-text">Art Print</span>
+            <span>--&gt;</span>
+          </span>
+        </button>
+
+        <a href="#" target="_blank" rel="noopener"
+           class="tile hover-effect-solo btn-reset" data-shop-item="item-5">
+          <span class="tile-image">
+            <div class="tile-image-placeholder"></div>
+          </span>
+          <span class="tile-info size-20">
+            <span class="tile-info-text">Kalari Zine</span>
+            <span>--&gt;</span>
+          </span>
+        </a>
+
+      </div>
+    </div>
+
+    <!-- Right scrolling image strip -->
+    <div class="shop-right">
+      <div class="right-track">
+        <!--
+          Replace src with your wide strip image: public/img/animorph.png
+          Duplicate 3× for a seamless infinite scroll.
+        -->
+        <div class="right-track-item">
+          <img src="public/img/animorph.png" alt=""
+               onerror="this.closest('.right-track-item').style.background='linear-gradient(90deg,#FF6B00,#1A3A3A)'">
+        </div>
+        <div class="right-track-item" aria-hidden="true">
+          <img src="public/img/animorph.png" alt="">
+        </div>
+        <div class="right-track-item" aria-hidden="true">
+          <img src="public/img/animorph.png" alt="">
+        </div>
+      </div>
+
+      <!--
+        Optional: floating sculpture/object GIF.
+        Replace with: public/img/sculpture.gif
+      -->
+      <!-- <img src="public/img/sculpture.gif" alt="" class="sculpture"> -->
+    </div>
+
+  </section>
+
+</main>
+
+<script src="main.js"></script>
+</body>
+</html>
