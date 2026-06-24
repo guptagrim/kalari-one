@@ -187,40 +187,50 @@ img { max-width: 100%; }
   position: fixed;
   z-index: 50;
   top: 0; left: 0;
-  width: 0; height: 0;
+  width: 100%; height: 100%;
 }
 .blob {
   border-radius: 50%;
   filter: drop-shadow(4px 4px 20px rgba(0,0,0,.25));
   outline: var(--small-border-size) solid var(--color-accent);
   overflow: hidden;
-  pointer-events: none;
+  pointer-events: auto;
   position: absolute;
-  transform: translate3d(calc(var(--bx, 0) * 1px - 50%), calc(var(--by, 0) * 1px - 50%), 0);
-  transition: width .15s, height .15s;
+  top: 30%;
+  left: 20%;
+  transition: width .3s ease, height .3s ease;
   width: 28vw;
   height: 14vw;
+  animation: blob-float 9s ease-in-out infinite;
 }
 @media screen and (min-width: 769px) {
   .blob { width: 14vw; height: 7vw; }
 }
-.blob-active { pointer-events: auto; }
 @media (hover: hover) {
-  .blob-active:hover { width: 22vw; height: 11vw; }
+  .blob:hover { width: 22vw; height: 11vw; }
 }
 @media screen and (min-width: 769px) {
-  @media (hover: hover) { .blob-active:hover { width: 22vw; height: 11vw; } }
+  @media (hover: hover) { .blob:hover { width: 22vw; height: 11vw; } }
+}
+
+@keyframes blob-float {
+  0%   { transform: translate(0,    0); }
+  20%  { transform: translate(18vw, 8vh); }
+  40%  { transform: translate(38vw, -5vh); }
+  60%  { transform: translate(25vw, 20vh); }
+  80%  { transform: translate(5vw,  15vh); }
+  100% { transform: translate(0,    0); }
 }
 
 .blob-display {
   background-image: url('public/img/hero-bg.jpg');
-  background-size: 100vw auto;
-  height: 100vh;
-  left: 0;
+  background-size: cover;
+  background-position: center;
+  height: 100%;
+  width: 100%;
   position: absolute;
   top: 0;
-  width: 100vw;
-  transform: translate3d(calc(var(--bx, 0) * -1px + 50%), calc(var(--by, 0) * -1px + 50%), 0);
+  left: 0;
 }
 /* fallback gradient if no image */
 .blob-display:not([style*="url"]) {

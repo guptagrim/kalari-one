@@ -12,35 +12,7 @@ window.addEventListener('load', () => {
 
 // ── Cursor blob ────────────────────────────────────────────
 (function initBlob() {
-  const blob = document.querySelector('.blob');
-  if (!blob) return;
-
-  let mx = window.innerWidth / 2;
-  let my = window.innerHeight / 2;
-  let cx = mx, cy = my;
-  let raf;
-
-  function update() {
-    cx += (mx - cx) * 0.12;
-    cy += (my - cy) * 0.12;
-    blob.style.setProperty('--bx', Math.round(cx));
-    blob.style.setProperty('--by', Math.round(cy));
-    raf = requestAnimationFrame(update);
-  }
-
-  document.addEventListener('mousemove', e => {
-    mx = e.clientX;
-    my = e.clientY;
-    if (!blob.classList.contains('blob-active')) {
-      blob.classList.add('blob-active');
-    }
-  });
-
-  document.addEventListener('mouseleave', () => {
-    blob.classList.remove('blob-active');
-  });
-
-  update();
+  // Blob floats on its own — no cursor tracking
 })();
 
 // ── RSVP form ─────────────────────────────────────────────
