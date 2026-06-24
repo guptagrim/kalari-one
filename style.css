@@ -12,7 +12,7 @@ button,input{overflow:visible}button,select{text-transform:none}
 /* ── Design tokens ── */
 :root {
   --color-accent:    #C8511E;   /* burnt terracotta — warm, earthy orange */
-  --color-hover:     #D4AF37;   /* antique gold */
+  --color-hover:     #F5C518;   /* golden yellow */
   --color-section:   #6B9976;   /* aloe vera green */
   --color-white:     #fff;
   --color-black:     #000;
@@ -190,24 +190,26 @@ img { max-width: 100%; }
   width: 0; height: 0;
 }
 .blob {
-  aspect-ratio: 1;
-  border-radius: 100%;
+  border-radius: 50%;
   filter: drop-shadow(4px 4px 20px rgba(0,0,0,.25));
   outline: var(--small-border-size) solid var(--color-accent);
   overflow: hidden;
   pointer-events: none;
   position: absolute;
   transform: translate3d(calc(var(--bx, 0) * 1px - 50%), calc(var(--by, 0) * 1px - 50%), 0);
-  transition: width .15s;
-  width: 45vw;
-}
-@media screen and (min-width: 769px) { .blob { width: 22.5vw; } }
-.blob-active { pointer-events: auto; }
-@media (hover: hover) {
-  .blob-active:hover { width: 35vw; }
+  transition: width .15s, height .15s;
+  width: 28vw;
+  height: 14vw;
 }
 @media screen and (min-width: 769px) {
-  @media (hover: hover) { .blob-active:hover { width: 35vw; } }
+  .blob { width: 14vw; height: 7vw; }
+}
+.blob-active { pointer-events: auto; }
+@media (hover: hover) {
+  .blob-active:hover { width: 22vw; height: 11vw; }
+}
+@media screen and (min-width: 769px) {
+  @media (hover: hover) { .blob-active:hover { width: 22vw; height: 11vw; } }
 }
 
 .blob-display {
