@@ -83,21 +83,21 @@ window.addEventListener('load', () => {
   const items = [
     {
       id: 'item-1',
-      title: 'हरेम पैंट',
+      title: 'Harem Pants',
       price: null,
       img: 'public/img/shop/item1.png',
       variants: ['XS', 'S', 'M', 'L', 'XL'],
     },
     {
       id: 'item-2',
-      title: 'दुपट्टा',
+      title: 'Scarf',
       price: null,
       img: 'public/img/shop/item2.png',
       variants: ['Item'],
     },
     {
       id: 'item-3',
-      title: 'त-शर्ट',
+      title: 'त-Shirt',
       price: null,
       img: 'public/img/shop/item3.png',
       variants: ['XS', 'S', 'M', 'L', 'XL'],
