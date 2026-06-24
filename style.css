@@ -11,14 +11,14 @@ button,input{overflow:visible}button,select{text-transform:none}
 
 /* ── Design tokens ── */
 :root {
-  --color-accent:    #FF6B00;   /* saffron — replaces MSCHF pink */
-  --color-hover:     #FFD700;   /* gold — replaces yellow */
-  --color-section:   #1A3A3A;   /* deep teal — replaces blue */
+  --color-accent:    #C8511E;   /* burnt terracotta — warm, earthy orange */
+  --color-hover:     #D4AF37;   /* antique gold */
+  --color-section:   #6B9976;   /* aloe vera green */
   --color-white:     #fff;
   --color-black:     #000;
   --color-text:      var(--color-black);
   --color-bg:        var(--color-white);
-  --color-preloader: #C04000;   /* deep saffron */
+  --color-preloader: #6B9976;   /* aloe vera green */
 
   --container-inner: 10px;
   --border-size:     5px;

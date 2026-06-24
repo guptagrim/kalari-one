@@ -83,38 +83,24 @@ window.addEventListener('load', () => {
   const items = [
     {
       id: 'item-1',
-      title: 'Kalari Long Sleeve',
-      price: 65,
+      title: 'हरेम पैंट',
+      price: null,
       img: 'public/img/shop/item1.png',
-      variants: ['S', 'M', 'L', 'XL'],
+      variants: ['XS', 'S', 'M', 'L', 'XL'],
     },
     {
       id: 'item-2',
-      title: 'Kalari Tee',
-      price: 45,
+      title: 'दुपट्टा',
+      price: null,
       img: 'public/img/shop/item2.png',
-      variants: ['S', 'M', 'L', 'XL'],
-    },
-    {
-      id: 'item-3',
-      title: 'Studio Hoodie',
-      price: 85,
-      img: 'public/img/shop/item3.png',
-      variants: ['S', 'M', 'L', 'XL'],
-    },
-    {
-      id: 'item-4',
-      title: 'Art Print',
-      price: 40,
-      img: 'public/img/shop/item4.png',
       variants: ['Item'],
     },
     {
-      id: 'item-5',
-      title: 'Kalari Zine',
-      price: 20,
-      img: 'public/img/shop/item5.png',
-      external: '#',
+      id: 'item-3',
+      title: 'त-शर्ट',
+      price: null,
+      img: 'public/img/shop/item3.png',
+      variants: ['XS', 'S', 'M', 'L', 'XL'],
     },
   ];
 
