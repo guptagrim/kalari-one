@@ -10,13 +10,60 @@
   <meta property="og:description" content="Kalari Studios is launching soon.">
   <meta property="og:type" content="website">
   <link rel="stylesheet" href="style.css">
-  <link rel="preload" as="image" href="public/img/backdrops/backdrop-eyes.svg">
 </head>
 <body>
 
-<!-- ── BACKDROP: fixed full-bleed art layer behind everything ── -->
+<!-- ── BACKDROP: fixed full-bleed art layer behind everything ──
+     Inlined (not <img src>) so main.js can reach the .eye groups
+     to drive the blink animation — SVGs loaded via <img> are opaque
+     to the parent page's script. ── -->
 <div class="backdrop-layer" aria-hidden="true">
-  <img class="backdrop-img" src="public/img/backdrops/backdrop-eyes.svg" alt="">
+  <svg class="backdrop-img" viewBox="0 0 1200 1200" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+    <!-- Square viewBox so "slice" cover-cropping keeps both eyes on
+         screen in portrait (crops sides) AND landscape (crops top/bottom) —
+         a wide canvas would push these past the crop line on mobile. -->
+    <!-- Left eye: mirrored so its outer corner/flick points left (outward).
+         Anchored so the iris (the part worth keeping) survives the
+         portrait-crop "slice" on mobile — only the outer flick is
+         expendable there. -->
+    <g class="eye-group" transform="translate(445,470) rotate(6) scale(-1.15,1.15)">
+      <path class="brow" d="M2,10 C58,-22 168,-24 254,4 C256,7 255,11 251,10 C170,-10 62,-8 8,16 C4,18 0,14 2,10 Z" fill="#5C2A1E"/>
+      <path class="lid-crease" d="M18,54 C56,24 150,10 238,34" fill="none" stroke="#5C2A1E" stroke-width="2.6" stroke-linecap="round" opacity="0.75"/>
+      <g class="eye">
+        <path d="M8,78 C8,54 42,38 92,34 C158,29 214,44 244,62 C251,66 251,72 244,76 C210,98 150,110 92,108 C44,105 8,98 8,78 Z" fill="none" stroke="#5C2A1E" stroke-width="4.2" stroke-linejoin="round"/>
+        <ellipse cx="74" cy="76" rx="19" ry="16.5" fill="#8C6A3F"/>
+        <circle cx="74" cy="76" r="8" fill="#2E1B12"/>
+        <circle cx="70" cy="71" r="2.4" fill="#F4E9D8" opacity="0.85"/>
+        <path d="M46,100 q3,9 1,13" stroke="#5C2A1E" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+        <path d="M68,105 q3,10 0,14" stroke="#5C2A1E" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+        <path d="M92,107 q3,10 -1,13" stroke="#5C2A1E" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+        <path d="M116,105 q3,9 -1,12" stroke="#5C2A1E" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+        <path d="M240,62 q24,-16 38,-28" stroke="#5C2A1E" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <path d="M236,70 q24,-6 38,-8" stroke="#5C2A1E" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <path d="M232,78 q20,2 30,8" stroke="#5C2A1E" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <circle cx="250" cy="80" r="3.6" fill="#7A8B6F" opacity="0.85"/>
+      </g>
+    </g>
+    <!-- Right eye: unmirrored so its outer corner/flick points right (outward) -->
+    <g class="eye-group" transform="translate(755,530) rotate(-6) scale(1.15,1.15)">
+      <path class="brow" d="M2,10 C58,-22 168,-24 254,4 C256,7 255,11 251,10 C170,-10 62,-8 8,16 C4,18 0,14 2,10 Z" fill="#5C2A1E"/>
+      <path class="lid-crease" d="M18,54 C56,24 150,10 238,34" fill="none" stroke="#5C2A1E" stroke-width="2.6" stroke-linecap="round" opacity="0.75"/>
+      <g class="eye">
+        <path d="M8,78 C8,54 42,38 92,34 C158,29 214,44 244,62 C251,66 251,72 244,76 C210,98 150,110 92,108 C44,105 8,98 8,78 Z" fill="none" stroke="#5C2A1E" stroke-width="4.2" stroke-linejoin="round"/>
+        <ellipse cx="74" cy="76" rx="19" ry="16.5" fill="#8C6A3F"/>
+        <circle cx="74" cy="76" r="8" fill="#2E1B12"/>
+        <circle cx="70" cy="71" r="2.4" fill="#F4E9D8" opacity="0.85"/>
+        <path d="M46,100 q3,9 1,13" stroke="#5C2A1E" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+        <path d="M68,105 q3,10 0,14" stroke="#5C2A1E" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+        <path d="M92,107 q3,10 -1,13" stroke="#5C2A1E" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+        <path d="M116,105 q3,9 -1,12" stroke="#5C2A1E" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+        <path d="M240,62 q24,-16 38,-28" stroke="#5C2A1E" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <path d="M236,70 q24,-6 38,-8" stroke="#5C2A1E" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <path d="M232,78 q20,2 30,8" stroke="#5C2A1E" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <circle cx="250" cy="80" r="3.6" fill="#7A8B6F" opacity="0.85"/>
+      </g>
+    </g>
+  </svg>
 </div>
 
 <!-- ── PAGE ──────────────────────────────────────────────── -->

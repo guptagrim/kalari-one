@@ -1,12 +1,38 @@
 /* Kalari Studios — main.js */
 
-// ── Backdrop reveal ────────────────────────────────────────
+// ── Backdrop reveal + eye blink ──────────────────────────────
 (function initBackdrop() {
-  const img = document.querySelector('.backdrop-img');
-  if (!img) return;
-  const reveal = () => requestAnimationFrame(() => img.classList.add('is-visible'));
-  if (img.complete) reveal();
-  else img.addEventListener('load', reveal, { once: true });
+  const svg = document.querySelector('.backdrop-img');
+  const eyes = document.querySelectorAll('.eye');
+  if (!svg) return;
+
+  // Random delay in [5.0, 10.0], to one decimal place.
+  function randomBlinkDelay() {
+    return Math.round((5 + Math.random() * 5) * 10) / 10;
+  }
+
+  function doBlink() {
+    eyes.forEach(eye => {
+      eye.classList.remove('blink');
+      void eye.getBoundingClientRect(); // force reflow so the animation restarts
+      eye.classList.add('blink');
+    });
+  }
+
+  function blinkLoop() {
+    if (!eyes.length) return;
+    doBlink();
+    eyes[0].addEventListener('animationend', () => {
+      setTimeout(blinkLoop, randomBlinkDelay() * 1000);
+    }, { once: true });
+  }
+
+  requestAnimationFrame(() => {
+    svg.classList.add('is-visible');
+    // First blink once the entrance animation settles, then loop on
+    // a fresh random 5.0–10.0s delay chosen after each blink.
+    svg.addEventListener('transitionend', blinkLoop, { once: true });
+  });
 })();
 
 // ── Notify form ───────────────────────────────────────────
