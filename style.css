@@ -20,6 +20,13 @@ button,input{overflow:visible}button,select{text-transform:none}
   --color-bg:        #F4E9D8;   /* aged parchment / putty base, sits under the backdrop art */
   --color-thread:    #5C2A1E;   /* embroidery thread — matches the backdrop eye linework */
 
+  /* Procedural fiber-grain: SVG fractal noise → alpha mask → flooded with
+     the thread color. Not a photo (couldn't reach any image host from this
+     session — every external domain tried came back network-policy-blocked),
+     but it's real generated grain, not a flat gradient. Tiles at 140x140px
+     so it stays correct at any element size, unlike a stretched photo. */
+  --fabric-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n' color-interpolation-filters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='1' stitchTiles='stitch' result='t'/%3E%3CfeColorMatrix in='t' type='matrix' values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0.33 0.33 0.33 0 0' result='a'/%3E%3CfeComponentTransfer in='a' result='a2'%3E%3CfeFuncA type='discrete' tableValues='0 0 0 0.18 0.34 0.55 0.75'/%3E%3C/feComponentTransfer%3E%3CfeFlood flood-color='%235C2A1E' result='c'/%3E%3CfeComposite in='c' in2='a2' operator='in'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+
   --font-body: 'Inter', sans-serif;
   --font-weight-regular: 400;
   --font-weight-medium: 500;
@@ -165,28 +172,38 @@ img { max-width: 100%; }
   width: 100%;
   max-width: 420px;
 }
-.notify-form input {
-  /* rounded "embroidered cord" border: fill sits in the padding-box,
-     a tight diagonal thread-twist fills the border-box ring — this
-     bends cleanly around the pill radius, unlike border-image */
-  background:
-    linear-gradient(var(--color-white), var(--color-white)) padding-box,
-    repeating-linear-gradient(
-      45deg,
-      var(--color-thread) 0 3px,
-      var(--color-accent) 3px 6px
-    ) border-box;
-  border: 4px solid transparent;
-  border-radius: 999px;
-  box-shadow: inset 0 0 0 1px rgba(0,0,0,.12);
-  color: var(--color-black);
+.stitch-wrap {
   flex: 1;
-  font-size: 15px;
   min-width: 0;
-  padding: 14px 22px;
+  position: relative;
+}
+/* Second, inset ring of stitches — real hand embroidery is rarely a single
+   perfect pass; a slightly offset second row (different perimeter, so the
+   dash spacing naturally falls out of phase with the outer ring) reads as
+   an open running stitch rather than a printed dashed line. */
+.stitch-wrap::before {
+  border: 2px dashed var(--color-accent);
+  border-radius: 999px;
+  content: "";
+  inset: 5px;
+  pointer-events: none;
+  position: absolute;
+}
+.notify-form input {
+  background-color: var(--color-white);
+  background-image: var(--fabric-grain);
+  background-blend-mode: multiply;
+  border: 3px dashed var(--color-thread); /* open stitches: real gaps, rounds natively with border-radius */
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.08);
+  color: var(--color-black);
+  font-size: 15px;
+  padding: 16px 24px;
+  position: relative;
+  width: 100%;
 }
 .notify-form input::placeholder { color: #999; }
-.notify-form input:focus { outline: 2px solid var(--color-accent); outline-offset: 3px; }
+.notify-form input:focus { outline: 2px solid var(--color-accent); outline-offset: 4px; }
 .notify-form button {
   background: var(--color-black);
   border: 2px solid var(--color-black);

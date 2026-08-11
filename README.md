@@ -44,6 +44,35 @@ same inline-and-scriptable treatment — e.g. two SVG/PNG layers (open eye
 + closed eye) cross-faded by the same timer logic, since a single flat
 raster image can't squash itself.
 
+## The stitched email input
+
+`.stitch-wrap` (wraps the `<input>` in the notify form) draws an **open**
+running-stitch border — real dashed gaps, not a solid line — using two
+layers:
+
+- The input's own `border: 3px dashed var(--color-thread)` — native CSS
+  dashes round cleanly around the pill radius, unlike `border-image`
+  (which doesn't bend around `border-radius` reliably) or a fixed-size
+  SVG path (which wouldn't stay correct if the input's width changes
+  responsively).
+- `.stitch-wrap::before`, a second inset dashed ring in the accent color.
+  Its perimeter differs slightly from the outer ring's, so the two rings'
+  dash phases fall out of sync — closer to how a real second pass of
+  hand-stitching looks than one perfectly repeating pattern.
+
+The fill texture (`--fabric-grain` in `:root`) is **procedurally
+generated**, not a photo: an SVG `feTurbulence` noise filter, thresholded
+through a `discrete` alpha transfer to get visible cellular/woven
+structure, then flooded with the thread color. This was a deliberate
+fallback — I looked for a genuinely licensed (CC0/public-domain) thread
+or linen texture photo to use instead, but every external image host this
+session tried (ShareTextures, Negative Space, Wikimedia Commons) came
+back blocked by the environment's network egress policy. If you have a
+licensed texture image on hand, swapping it in is straightforward: it just
+needs to be a **repeating tile** (set as `background-image` alongside
+`background-repeat`), not a single image stretched across the input,
+since the input's width is responsive.
+
 ## Text to update
 
 | What | Where |
