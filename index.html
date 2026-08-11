@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=5, minimum-scale=1">
-  <title>Kalari Studio</title>
-  <meta name="description" content="Kalari Studio — Debut Collection">
-  <meta name="author" content="Kalari Studio">
-  <meta property="og:title" content="Kalari Studio">
-  <meta property="og:description" content="Kalari Studio — Debut Collection">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kalari Studios — Coming Soon</title>
+  <meta name="description" content="Kalari Studios is launching soon.">
+  <meta name="author" content="Kalari Studios">
+  <meta property="og:title" content="Kalari Studios — Coming Soon">
+  <meta property="og:description" content="Kalari Studios is launching soon.">
   <meta property="og:type" content="website">
   <link rel="stylesheet" href="style.css">
   <link rel="preload" as="image" href="public/img/backdrops/backdrop-eyes.svg">
@@ -19,246 +19,36 @@
   <img class="backdrop-img" src="public/img/backdrops/backdrop-eyes.svg" alt="">
 </div>
 
-<!-- ── PRELOADER ─────────────────────────────────────────── -->
-<div id="preloader">
-  <div class="preloader-marquee top">
-    <div class="inner">
-      KALARI &nbsp; KALARI &nbsp; KALARI &nbsp; KALARI &nbsp; KALARI &nbsp;
-      KALARI &nbsp; KALARI &nbsp; KALARI &nbsp; KALARI &nbsp; KALARI &nbsp;
-      KALARI &nbsp; KALARI &nbsp; KALARI &nbsp; KALARI &nbsp; KALARI &nbsp;
-      KALARI &nbsp; KALARI &nbsp; KALARI &nbsp; KALARI &nbsp; KALARI &nbsp;
-      KALARI &nbsp; KALARI &nbsp; KALARI &nbsp; KALARI &nbsp; KALARI &nbsp;
-    </div>
-    <div class="inner" aria-hidden="true">
-      KALARI &nbsp; KALARI &nbsp; KALARI &nbsp; KALARI &nbsp; KALARI &nbsp;
-      KALARI &nbsp; KALARI &nbsp; KALARI &nbsp; KALARI &nbsp; KALARI &nbsp;
-      KALARI &nbsp; KALARI &nbsp; KALARI &nbsp; KALARI &nbsp; KALARI &nbsp;
-      KALARI &nbsp; KALARI &nbsp; KALARI &nbsp; KALARI &nbsp; KALARI &nbsp;
-    </div>
-  </div>
+<!-- ── PAGE ──────────────────────────────────────────────── -->
+<div class="page">
 
-  <div class="preloader-middle">
-    <!--
-      Replace with your actual logo:
-      <img src="public/img/logo.svg" alt="Kalari Studio" style="max-width:180px; margin-bottom:.7em;">
-    -->
-    <p class="brand-name">Kalari</p>
-    <p class="brand-sub">कलारी स्टूडियो</p>
-  </div>
+  <header class="site-header">
+    <span class="wordmark">Kalari Studios</span>
+  </header>
 
-  <div class="preloader-marquee bottom reverse">
-    <div class="inner">
-      STUDIO &nbsp; STUDIO &nbsp; STUDIO &nbsp; STUDIO &nbsp; STUDIO &nbsp;
-      STUDIO &nbsp; STUDIO &nbsp; STUDIO &nbsp; STUDIO &nbsp; STUDIO &nbsp;
-      STUDIO &nbsp; STUDIO &nbsp; STUDIO &nbsp; STUDIO &nbsp; STUDIO &nbsp;
-      STUDIO &nbsp; STUDIO &nbsp; STUDIO &nbsp; STUDIO &nbsp; STUDIO &nbsp;
-    </div>
-    <div class="inner" aria-hidden="true">
-      STUDIO &nbsp; STUDIO &nbsp; STUDIO &nbsp; STUDIO &nbsp; STUDIO &nbsp;
-      STUDIO &nbsp; STUDIO &nbsp; STUDIO &nbsp; STUDIO &nbsp; STUDIO &nbsp;
-      STUDIO &nbsp; STUDIO &nbsp; STUDIO &nbsp; STUDIO &nbsp; STUDIO &nbsp;
-      STUDIO &nbsp; STUDIO &nbsp; STUDIO &nbsp; STUDIO &nbsp; STUDIO &nbsp;
-    </div>
-  </div>
-</div>
+  <main class="hero">
+    <p class="eyebrow">Coming Soon</p>
+    <h1 class="headline">Kalari Studios</h1>
+    <p class="tagline">Clothing that moves with you.</p>
 
-<!-- ── CURSOR BLOB ────────────────────────────────────────── -->
-<div id="blob-container" aria-hidden="true">
-  <div class="blob">
-    <div class="blob-display"></div>
-  </div>
-</div>
+    <p class="launch-date">Launching September 14, 2026</p>
 
-<!-- ── MAIN PAGE ──────────────────────────────────────────── -->
-<main class="page-content">
-
-  <!-- LOCKUP: hero headline -->
-  <section class="section-lockup lockup-container">
-    <h1 class="size-58">
-      <span>Kalari Studio</span>
-      <span>DEBUT COLLECTION</span>
-      <span class="devanagari">पहला संग्रह</span>
-    </h1>
-    <p class="size-20">
-      Clothing that moves with you — come feel, breathe, and be transformed.
-    </p>
-  </section>
-
-  <!-- TIME BAR: sticky launch date -->
-  <div class="section-time time-container">
-    <span class="size-16 time-el bg-black color-white">
-      Launch: 14 September, 2026
-    </span>
-  </div>
-
-  <!-- SIGNUP: notify form -->
-  <div class="section-signup signup-container">
-    <form id="rsvp-form" class="signup-form">
-      <label class="field-label size-26">
-        <span class="field-label-title">Enter your e-mail</span>
-        <div class="input-wrap std-border">
-          <input type="email" name="email" placeholder="you@example.com" required>
-        </div>
-      </label>
-      <button type="submit" class="submit-btn std-border">
-        <span class="inner">
-          <span class="inner-primary">Notify me</span>
-          <span>--&gt;</span>
-        </span>
+    <form id="notify-form" class="notify-form">
+      <label for="notify-email" class="visually-hidden">Email address</label>
+      <input id="notify-email" type="email" name="email" placeholder="Your email address" required>
+      <button type="submit">
+        <span class="btn-label">Notify me</span>
       </button>
     </form>
-  </div>
+    <p id="notify-status" class="notify-status" role="status" aria-live="polite"></p>
+  </main>
 
-  <!-- LOGO: top-right corner mark -->
-  <div class="section-logo logo-container">
-    <a href="#" class="hover-effect-parent logo-mark std-border" aria-label="Kalari Studio">
-      <!--
-        Replace this SVG with your actual logo mark.
-        Or use: <img src="public/img/logo.svg" alt="Kalari Studio">
-      -->
-      <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <text x="4" y="32" font-family="Inter,sans-serif" font-weight="900"
-              font-size="34" fill="currentColor">K</text>
-      </svg>
-      <p class="logo-text">Studio</p>
-    </a>
-  </div>
+  <footer class="site-footer">
+    <span>&copy; <span id="year"></span> Kalari Studios</span>
+    <a href="#" target="_blank" rel="noopener">Instagram</a>
+  </footer>
 
-  <!-- BANNER: scrolling tagline -->
-  <div class="section-banner banner-container bg-hover size-30">
-    <div class="banner-track">
-      <span>Kalari Studio &nbsp; · &nbsp; Debut Collection &nbsp; · &nbsp; पहला संग्रह &nbsp; · &nbsp; 14 September 2026 &nbsp; / &nbsp;</span>
-      <span>Kalari Studio &nbsp; · &nbsp; Debut Collection &nbsp; · &nbsp; पहला संग्रह &nbsp; · &nbsp; 14 September 2026 &nbsp; / &nbsp;</span>
-      <span>Kalari Studio &nbsp; · &nbsp; Debut Collection &nbsp; · &nbsp; पहला संग्रह &nbsp; · &nbsp; 14 September 2026 &nbsp; / &nbsp;</span>
-      <span>Kalari Studio &nbsp; · &nbsp; Debut Collection &nbsp; · &nbsp; पहला संग्रह &nbsp; · &nbsp; 14 September 2026 &nbsp; / &nbsp;</span>
-      <span>Kalari Studio &nbsp; · &nbsp; Debut Collection &nbsp; · &nbsp; पहला संग्रह &nbsp; · &nbsp; 14 September 2026 &nbsp; / &nbsp;</span>
-      <span>Kalari Studio &nbsp; · &nbsp; Debut Collection &nbsp; · &nbsp; पहला संग्रह &nbsp; · &nbsp; 14 September 2026 &nbsp; / &nbsp;</span>
-    </div>
-  </div>
-
-  <!-- INFO: launch callout -->
-  <section class="section-info info-container">
-    <span class="info-callout size-30-58">
-      <span>LAUNCHES SEPTEMBER 14</span>
-      <span>2026 · Kalari Studio</span>
-      <span class="devanagari">संग्रह शुरू होता है।</span>
-    </span>
-    <a href="#" target="_blank" rel="noopener" class="info-details-wrapper hover-effect-parent">
-      <span class="info-details hover-effect std-border">
-        <span class="info-details-title size-34">Debut Collection</span>
-        <span class="info-details-subtitle size-20">Kalari Studio · September 14, 2026</span>
-      </span>
-    </a>
-  </section>
-
-  <!-- VIDEO: autoplay looping clip -->
-  <div class="section-video video-container">
-    <div class="video-media">
-      <video
-        playsinline muted loop autoplay
-        src="public/video/hero.mp4"
-        onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
-      ></video>
-      <div class="video-placeholder" style="display:none;"></div>
-
-      <svg viewBox="0 0 400 50" class="venue-wordmark" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <text x="10" y="40"
-              font-family="Inter,sans-serif"
-              font-weight="800"
-              font-size="38"
-              letter-spacing="-1"
-              fill="white">KALARI STUDIO</text>
-      </svg>
-    </div>
-  </div>
-
-  <!-- SHOP: gift shop grid -->
-  <section class="section-shop shop-container">
-
-    <!-- Left label -->
-    <div class="shop-left">
-      <h2 class="size-40 color-white">
-        <span>Gift<br>Shop</span>
-        <span class="shop-label">Exit</span>
-      </h2>
-    </div>
-
-    <!-- Animated arrows -->
-    <div class="shop-arrows">
-      <div class="arrows-track">
-        <span class="arrows-track-item color-white">--&gt;</span>
-        <span class="arrows-track-item color-white">--&gt;</span>
-        <span class="arrows-track-item color-white">--&gt;</span>
-        <span class="arrows-track-item color-white">--&gt;</span>
-        <span class="arrows-track-item color-white">--&gt;</span>
-        <span class="arrows-track-item color-white">--&gt;</span>
-      </div>
-      <span class="arrows-title size-20 color-white">Kalari Studio</span>
-    </div>
-
-    <!-- Product tiles -->
-    <div class="shop-items">
-      <div class="items-inner">
-
-        <button class="tile hover-effect-solo btn-reset" data-shop-item="item-1">
-          <span class="tile-image">
-            <img data-src="public/img/shop/item1.png" alt="Harem Pants"
-                 onerror="this.style.display='none'">
-            <div class="tile-image-placeholder"></div>
-          </span>
-          <span class="tile-info size-20">
-            <span class="tile-info-text">Harem Pants</span>
-            <span>--&gt;</span>
-          </span>
-        </button>
-
-        <button class="tile hover-effect-solo btn-reset" data-shop-item="item-2">
-          <span class="tile-image">
-            <img data-src="public/img/shop/item2.png" alt="Scarf"
-                 onerror="this.style.display='none'">
-            <div class="tile-image-placeholder"></div>
-          </span>
-          <span class="tile-info size-20">
-            <span class="tile-info-text">Scarf</span>
-            <span>--&gt;</span>
-          </span>
-        </button>
-
-        <button class="tile hover-effect-solo btn-reset" data-shop-item="item-3">
-          <span class="tile-banner size-16">New!</span>
-          <span class="tile-image">
-            <img data-src="public/img/shop/item3.png" alt="त-Shirt"
-                 onerror="this.style.display='none'">
-            <div class="tile-image-placeholder"></div>
-          </span>
-          <span class="tile-info size-20">
-            <span class="tile-info-text">त-Shirt</span>
-            <span>--&gt;</span>
-          </span>
-        </button>
-
-      </div>
-    </div>
-
-    <!-- Right scrolling image strip -->
-    <div class="shop-right">
-      <div class="right-track">
-        <div class="right-track-item">
-          <img src="public/img/animorph.png" alt=""
-               onerror="this.closest('.right-track-item').style.background='linear-gradient(90deg,#C8511E,#6B9976)'">
-        </div>
-        <div class="right-track-item" aria-hidden="true">
-          <img src="public/img/animorph.png" alt="">
-        </div>
-        <div class="right-track-item" aria-hidden="true">
-          <img src="public/img/animorph.png" alt="">
-        </div>
-      </div>
-    </div>
-
-  </section>
-
-</main>
+</div>
 
 <script src="main.js"></script>
 </body>
