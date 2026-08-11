@@ -1,5 +1,14 @@
 /* Kalari Studio — main.js */
 
+// ── Backdrop reveal ────────────────────────────────────────
+(function initBackdrop() {
+  const img = document.querySelector('.backdrop-img');
+  if (!img) return;
+  const reveal = () => requestAnimationFrame(() => img.classList.add('is-visible'));
+  if (img.complete) reveal();
+  else img.addEventListener('load', reveal, { once: true });
+})();
+
 // ── Preloader ──────────────────────────────────────────────
 window.addEventListener('load', () => {
   const preloader = document.getElementById('preloader');
