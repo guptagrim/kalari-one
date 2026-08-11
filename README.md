@@ -1,61 +1,54 @@
-# Kalari Studio — Exhibition Website
+# Kalari Studios — Coming Soon
 
-A single-page exhibition site inspired by the MSCHF Material Values format.
+A minimal "coming soon" landing page for Kalari Studios. Static site, no
+build step, no framework — just open `index.html`.
 
-## Where to drop your media files
+## Structure
 
 ```
+index.html   markup
+style.css    design tokens + layout
+main.js      backdrop reveal, email signup form, footer year
 public/
   img/
-    hero-bg.jpg        ← background image shown through the cursor blob
-    logo.svg           ← your logo mark (used in top-right corner)
-    animorph.png       ← wide horizontal image for the shop scrolling strip
-    sculpture.gif      ← optional floating object over the shop section
-    shop/
-      item1.png        ← Kalari Long Sleeve product image
-      item2.png        ← Kalari Tee
-      item3.png        ← Studio Hoodie
-      item4.png        ← Art Print
-      item5.png        ← Kalari Zine
-  video/
-    hero.mp4           ← autoplay muted loop video (bottom-left panel)
+    backdrops/
+      backdrop-eyes.svg   placeholder background art (see below)
 ```
 
-## Text to replace in index.html
+## The backdrop layer
 
-Search for `[` — every bracketed placeholder needs your real content:
+The faint art behind the page is a real `<img>`, not a CSS background —
+it sits in a fixed, full-viewport layer behind all page content
+(`.backdrop-layer` / `.backdrop-img` in `style.css`), gets preloaded via
+a `<link rel="preload">` in `<head>`, and animates in on load: it starts
+scaled up 4x, rotated 40°, and invisible, then eases down to its resting
+scale/rotation/opacity (`main.js` → `initBackdrop`).
 
-| Placeholder | Replace with |
+`public/img/backdrops/backdrop-eyes.svg` is a **placeholder** — scattered,
+muted eye motifs in the style of Rajasthani miniature painting. Swap it
+for real artwork whenever you have it; any raster or vector image works,
+since it's rendered with `object-fit: cover`. If the real art has a very
+different tonal range, revisit the `opacity` (`.12`–`.16`) and
+`filter: saturate() brightness()` values on `.backdrop-img` in `style.css`.
+
+## Text to update
+
+| What | Where |
 |---|---|
-| `[DATE]`, `[TIME]` | e.g. `Oct. 5th, 6–10PM` |
-| `[MONTH] [DAY] [YEAR]` | e.g. `OCTOBER 05 2025` |
-| `[Your Venue Name]` | your gallery / space name |
-| `[City, Country]` | e.g. `New Delhi, India` |
-| `[Full Address, City, Country]` | full postal address |
+| Launch date | `.launch-date` text in `index.html` |
+| Tagline | `.tagline` text in `index.html` |
+| Instagram / social links | `.site-footer` in `index.html` |
+| Email signup endpoint | `initForm()` in `main.js` — currently a stub that just shows a confirmation message |
 
-## Colors (style.css `:root`)
+## Colors (`style.css` `:root`)
 
-| Variable | Current value | Change to |
-|---|---|---|
-| `--color-accent` | `#FF6B00` saffron | your brand primary |
-| `--color-hover` | `#FFD700` gold | your hover/highlight |
-| `--color-section` | `#1A3A3A` deep teal | shop section background |
-| `--color-preloader` | `#C04000` deep saffron | preloader background |
-
-## Hindi / Punjabi text
-
-Current text uses **Hindi (Devanagari)**. To switch to **Punjabi (Gurmukhi)**:
-
-1. In `index.html` replace:
-   - `कलारी स्टूडियो` → `ਕਲਾਰੀ ਸਟੂਡੀਓ`
-   - `कलारी स्टूडियो की पहली प्रदर्शनी` → `ਕਲਾਰੀ ਸਟੂਡੀਓ ਦੀ ਪਹਿਲੀ ਪ੍ਰਦਰਸ਼ਨੀ`
-   - `कलारी स्टूडियो` / `प्रदर्शनी शुरू होती है।` → your Punjabi equivalents
-
-2. In `style.css`, change `.devanagari` class font to:
-   ```css
-   font-family: var(--font-gurmukhi);
-   ```
+| Variable | Current value |
+|---|---|
+| `--color-accent` | `#C8511E` burnt terracotta |
+| `--color-hover` | `#F5C518` golden yellow |
+| `--color-section` | `#6B9976` aloe green |
+| `--color-bg` | `#F4E9D8` parchment |
 
 ## Running locally
 
-Just open `index.html` in a browser — no build step needed.
+Just open `index.html` in a browser.
