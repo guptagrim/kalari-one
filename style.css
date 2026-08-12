@@ -9,6 +9,14 @@ button,input{overflow:visible}button,select{text-transform:none}
 /* ── Fonts ── */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap');
 
+@font-face {
+  font-family: 'Monotonia';
+  src: url('public/fonts/Monotonia.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* ── Design tokens ── */
 :root {
   --color-accent:    #C8511E;   /* burnt terracotta */
@@ -17,8 +25,18 @@ button,input{overflow:visible}button,select{text-transform:none}
   --color-white:     #fff;
   --color-black:     #1A1410;
   --color-text:      var(--color-black);
-  --color-bg:        #F4E9D8;   /* aged parchment / putty base, sits under the backdrop art */
-  --color-thread:    #5C2A1E;   /* embroidery thread — matches the backdrop eye linework */
+  --color-bg:        #E7DCC5;   /* base tone under the linen weave */
+  --color-thread:    #5C2A1E;   /* embroidery thread */
+
+  /* Procedural linen weave: alternating warp/weft bars (fakes the
+     over/under thread pattern) plus the same fiber-grain noise used on
+     the notify input, so the whole page reads as one consistent fabric
+     system. Vector, so it tiles at any resolution with zero quality
+     loss — actually a better fit than a raster photo repeat here, since
+     a stretched/tiled photo would show visible seams or blur when
+     scaled. Couldn't source a real licensed photo — same network-policy
+     wall as the button texture (see README). */
+  --linen-fabric: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28'%3E%3Crect width='28' height='28' fill='%23E7DCC5'/%3E%3Cg fill='%23DACCAE'%3E%3Crect x='0' width='3' height='28'/%3E%3Crect x='7' width='3' height='28'/%3E%3Crect x='14' width='3' height='28'/%3E%3Crect x='21' width='3' height='28'/%3E%3C/g%3E%3Cg fill='%23F2E8D4' opacity='0.65'%3E%3Crect y='0' width='28' height='3'/%3E%3Crect y='7' width='28' height='3'/%3E%3Crect y='14' width='28' height='3'/%3E%3Crect y='21' width='28' height='3'/%3E%3C/g%3E%3Cfilter id='w' color-interpolation-filters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch' result='t'/%3E%3CfeColorMatrix in='t' type='matrix' values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0.4 0.4 0.4 0 0' result='a'/%3E%3CfeComponentTransfer in='a' result='a2'%3E%3CfeFuncA type='discrete' tableValues='0 0.06 0.1 0.16 0.22'/%3E%3C/feComponentTransfer%3E%3CfeFlood flood-color='%238A7A5C' result='c'/%3E%3CfeComposite in='c' in2='a2' operator='in'/%3E%3C/filter%3E%3Crect width='28' height='28' filter='url(%23w)'/%3E%3C/svg%3E");
 
   /* Procedural fiber-grain: SVG fractal noise → alpha mask → flooded with
      the thread color. Not a photo (couldn't reach any image host from this
@@ -28,6 +46,7 @@ button,input{overflow:visible}button,select{text-transform:none}
   --fabric-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n' color-interpolation-filters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='1' stitchTiles='stitch' result='t'/%3E%3CfeColorMatrix in='t' type='matrix' values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0.33 0.33 0.33 0 0' result='a'/%3E%3CfeComponentTransfer in='a' result='a2'%3E%3CfeFuncA type='discrete' tableValues='0 0 0 0.18 0.34 0.55 0.75'/%3E%3C/feComponentTransfer%3E%3CfeFlood flood-color='%235C2A1E' result='c'/%3E%3CfeComposite in='c' in2='a2' operator='in'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 
   --font-body: 'Inter', sans-serif;
+  --font-display: 'Monotonia', serif;
   --font-weight-regular: 400;
   --font-weight-medium: 500;
   --font-weight-bold: 700;
@@ -41,6 +60,7 @@ html {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   background-color: var(--color-bg);
+  background-image: var(--linen-fabric);
   color: var(--color-text);
   font-family: var(--font-body);
   font-weight: var(--font-weight-regular);
@@ -58,71 +78,79 @@ img { max-width: 100%; }
 }
 
 /* ────────────────────────────────────────────
-   BACKDROP (fixed art layer behind all content)
-──────────────────────────────────────────── */
-.backdrop-layer {
-  height: 100%;
-  left: 0;
-  overflow: hidden;
-  pointer-events: none;
-  position: fixed;
-  top: 0;
-  width: 100%;
-  z-index: 1;
-}
-.backdrop-img {
-  display: block;
-  filter: saturate(.7) brightness(.94);
-  height: 100%;
-  opacity: 0;
-  transform: scale(4) rotate(40deg);
-  transition: opacity 1.6s cubic-bezier(.16,1,.3,1), transform 1.6s cubic-bezier(.16,1,.3,1);
-  width: 100%;
-}
-.backdrop-img.is-visible {
-  opacity: .16;
-  transform: scale(1) rotate(0deg);
-}
-@media screen and (min-width: 769px) {
-  .backdrop-img.is-visible { opacity: .12; }
-}
-
-/* ── Blink ── brow/crease stay put; only the eyeball group squashes */
-.eye {
-  transform-box: fill-box;
-  transform-origin: center;
-}
-.eye.blink {
-  animation: eye-blink .5s ease-in-out;
-}
-@keyframes eye-blink {
-  0%   { transform: scaleY(1); }
-  15%  { transform: scaleY(.06); }
-  30%  { transform: scaleY(.06); }
-  55%  { transform: scaleY(1); }
-  100% { transform: scaleY(1); }
-}
-
-/* ────────────────────────────────────────────
    PAGE LAYOUT
 ──────────────────────────────────────────── */
 .page {
   display: flex;
   flex-direction: column;
   min-height: 100dvh;
-  position: relative;
-  z-index: 2; /* must beat .backdrop-layer's z-index so it paints on top */
 }
 
 /* ── Header ── */
 .site-header {
-  padding: 24px 24px 0;
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 24px 0;
 }
 .wordmark {
-  font-size: 15px;
-  font-weight: var(--font-weight-xbold);
-  letter-spacing: .08em;
-  text-transform: uppercase;
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: var(--font-weight-regular);
+  letter-spacing: .02em;
+}
+
+/* ── Header toolbar: mute + cart, Apple-style frosted glass ── */
+.toolbar {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+}
+.glass-btn {
+  -webkit-backdrop-filter: blur(18px) saturate(180%);
+  backdrop-filter: blur(18px) saturate(180%);
+  align-items: center;
+  background: rgba(255, 255, 255, .38);
+  border: 1px solid rgba(255, 255, 255, .65);
+  border-radius: 999px;
+  box-shadow: 0 4px 18px rgba(26, 20, 16, .10), inset 0 1px 0 rgba(255, 255, 255, .75);
+  color: var(--color-black);
+  cursor: pointer;
+  display: flex;
+  height: 42px;
+  justify-content: center;
+  padding: 0;
+  position: relative;
+  transition: background-color .15s, transform .15s, box-shadow .15s;
+  width: 42px;
+}
+.glass-btn:hover {
+  background: rgba(255, 255, 255, .55);
+  box-shadow: 0 6px 22px rgba(26, 20, 16, .14), inset 0 1px 0 rgba(255, 255, 255, .85);
+  transform: translateY(-1px);
+}
+.glass-btn:active { transform: translateY(0); }
+.glass-btn:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+.glass-btn .icon { height: 20px; width: 20px; }
+.glass-btn .icon-muted { display: none; }
+.glass-btn[aria-pressed="true"] .icon-sound { display: none; }
+.glass-btn[aria-pressed="true"] .icon-muted { display: block; }
+.cart-count[hidden] { display: none; }
+.cart-count {
+  align-items: center;
+  background: var(--color-accent);
+  border-radius: 999px;
+  color: var(--color-white);
+  display: flex;
+  font-size: 10px;
+  font-weight: var(--font-weight-bold);
+  height: 17px;
+  justify-content: center;
+  min-width: 17px;
+  padding: 0 4px;
+  position: absolute;
+  right: -4px;
+  top: -4px;
 }
 
 /* ── Hero ── */
@@ -177,23 +205,27 @@ img { max-width: 100%; }
   min-width: 0;
   position: relative;
 }
-/* Second, inset ring of stitches — real hand embroidery is rarely a single
-   perfect pass; a slightly offset second row (different perimeter, so the
-   dash spacing naturally falls out of phase with the outer ring) reads as
-   an open running stitch rather than a printed dashed line. */
-.stitch-wrap::before {
-  border: 2px dashed var(--color-accent);
-  border-radius: 999px;
-  content: "";
-  inset: 5px;
+/* Hand-stitch outline: drawn by main.js (drawHandStitch), not CSS. A
+   native `border: dashed` is mathematically perfect — identical dash
+   length, identical gap, every time — which reads as printed, not sewn.
+   Real stitching wanders: length varies, spacing varies, the needle
+   angle wobbles. That irregularity has to come from code that jitters
+   each stitch individually, redrawn to match the input's live size via
+   ResizeObserver since border-image/a fixed SVG can't stay responsive. */
+.stitch-svg {
+  height: 100%;
+  left: 0;
+  overflow: visible;
   pointer-events: none;
   position: absolute;
+  top: 0;
+  width: 100%;
 }
 .notify-form input {
   background-color: var(--color-white);
   background-image: var(--fabric-grain);
   background-blend-mode: multiply;
-  border: 3px dashed var(--color-thread); /* open stitches: real gaps, rounds natively with border-radius */
+  border: none;
   border-radius: 999px;
   box-shadow: inset 0 0 0 1px rgba(0,0,0,.08);
   color: var(--color-black);
@@ -248,3 +280,26 @@ img { max-width: 100%; }
   text-underline-offset: 3px;
 }
 .site-footer a:hover { color: var(--color-accent); }
+
+/* ── Toast (cart click feedback) ── */
+.toast {
+  background: var(--color-black);
+  border-radius: 999px;
+  bottom: 28px;
+  color: var(--color-white);
+  font-size: 13px;
+  font-weight: var(--font-weight-medium);
+  left: 50%;
+  margin: 0;
+  opacity: 0;
+  padding: 10px 20px;
+  pointer-events: none;
+  position: fixed;
+  transform: translate(-50%, 8px);
+  transition: opacity .25s ease, transform .25s ease;
+  z-index: 100;
+}
+.toast.is-visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}

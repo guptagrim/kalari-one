@@ -6,72 +6,83 @@ build step, no framework — just open `index.html`.
 ## Structure
 
 ```
-index.html   markup — includes the backdrop SVG inline (see below)
-style.css    design tokens + layout
-main.js      backdrop reveal, eye blink loop, email signup form, footer year
+index.html          markup
+style.css            design tokens + layout
+main.js              hand-stitch renderer, music, cart stub, signup form
+public/
+  fonts/
+    Monotonia.otf    wordmark display font (user-supplied)
+  audio/
+    zen.mp3          background music (user-supplied)
 ```
 
-## The backdrop layer
+## The linen background
 
-The faint art behind the page is an inline `<svg class="backdrop-img">`
-inside `.backdrop-layer` in `index.html` — not a CSS background, and not
-a separate `<img src="...">` file. It's inlined on purpose: it's a real
-part of the page DOM, which is what lets `main.js` reach into it and
-drive the blink animation. (An SVG loaded via `<img src>` is opaque to
-the parent page's script — no DOM access, no way to trigger anything on
-a timer.)
+`html`'s `background-image` (`--linen-fabric` in `:root`) is a
+**procedurally generated** SVG tile — alternating warp/weft bars faking
+a woven over/under pattern, plus the same fiber-grain noise filter used
+on the notify input, so the whole page reads as one fabric system.
 
-It's currently **two placeholder eyes**, mirrored to flank the hero copy,
-drawn in the style of Rajasthani miniature painting — muted linework,
-winged outer-corner lashes, a lid crease, an iris highlight. Each eye is
-a `.eye-group` containing a static `.brow` + `.lid-crease` and a `.eye`
-group (outline, iris, pupil, lashes) that's the part that actually blinks.
+This is a placeholder for a real reference photo that couldn't be turned
+into a file: it was pasted inline into the conversation rather than
+uploaded as an attachment, and this environment doesn't save pasted
+images to disk the way it does file attachments (only the latter get a
+path I can read) — there's no way for me to extract it from here. I also
+tried sourcing a licensed replacement online; every external image host
+this session tried (ShareTextures, Negative Space, Wikimedia Commons,
+CadNav, Fuzzimo) came back blocked by the environment's network egress
+policy.
 
-**Reveal:** on load it starts scaled up 4x, rotated 40°, and invisible,
-then eases down to resting scale/rotation/opacity (`initBackdrop` in
-`main.js`).
+**Swapping in a real photo:** replace `--linen-fabric`'s value with
+`url("your-image.jpg")` and add `background-size: <tile-px>` alongside
+`background-repeat: repeat` on `html`. It needs to be an actual seamless
+tile (no visible edge when repeated) — a plain crop of a fabric photo
+usually shows a seam. Vector textures like the current one tile perfectly
+at any resolution for free; a raster photo needs to be prepared for
+seamless tiling first (most photo editors have a "make seamless" /
+offset-and-heal workflow for this).
 
-**Blink:** once the reveal settles, `.eye` gets a `.blink` class added,
-which plays the `eye-blink` keyframes in `style.css` (a quick vertical
-squash — the brow/crease don't move, only the eyeball does). After that
-animation ends, JS picks a fresh random delay between 5.0 and 10.0
-seconds and schedules the next blink, indefinitely.
+## The hand-stitched email input
 
-**Swapping in real artwork:** if the real art doesn't need to blink, you
-can go back to a plain `<img src="...">` in `.backdrop-layer` (simpler,
-and it can be a raster photo). If it *does* need to blink, it'll need the
-same inline-and-scriptable treatment — e.g. two SVG/PNG layers (open eye
-+ closed eye) cross-faded by the same timer logic, since a single flat
-raster image can't squash itself.
+`.stitch-wrap` (wraps the `<input>` in the notify form) is outlined by
+`drawHandStitch` in `main.js` — **not** a CSS `border`. A native
+`border: dashed` is mathematically perfect (identical dash length,
+identical gap, every time), which reads as printed rather than sewn.
+Real stitching wanders: length varies, spacing varies, the needle angle
+wobbles slightly off-perpendicular. To get that, each stitch is drawn
+individually as an SVG `<line>` with randomized length, spacing, angle,
+and position jitter, walking two rings around the input's rounded-pill
+outline (outer ring in `--color-thread`, inner ring in `--color-accent`,
+at a different perimeter so their spacing falls out of phase — like two
+separate passes of hand-stitching rather than one repeating pattern).
 
-## The stitched email input
+Since a fixed-size SVG or `border-image` can't track a responsive
+width, and a plain CSS border can't be made irregular, this redraws on
+a `ResizeObserver` bound to `.stitch-wrap` — it regenerates a fresh
+random pattern any time the input's rendered size changes.
 
-`.stitch-wrap` (wraps the `<input>` in the notify form) draws an **open**
-running-stitch border — real dashed gaps, not a solid line — using two
-layers:
+The fill texture (`--fabric-grain` in `:root`) is separately generated —
+an SVG `feTurbulence` noise filter, thresholded for visible cellular
+structure, flooded with the thread color. Same "couldn't reach a real
+texture photo" situation as the background above.
 
-- The input's own `border: 3px dashed var(--color-thread)` — native CSS
-  dashes round cleanly around the pill radius, unlike `border-image`
-  (which doesn't bend around `border-radius` reliably) or a fixed-size
-  SVG path (which wouldn't stay correct if the input's width changes
-  responsively).
-- `.stitch-wrap::before`, a second inset dashed ring in the accent color.
-  Its perimeter differs slightly from the outer ring's, so the two rings'
-  dash phases fall out of sync — closer to how a real second pass of
-  hand-stitching looks than one perfectly repeating pattern.
+## Header toolbar (mute + cart)
 
-The fill texture (`--fabric-grain` in `:root`) is **procedurally
-generated**, not a photo: an SVG `feTurbulence` noise filter, thresholded
-through a `discrete` alpha transfer to get visible cellular/woven
-structure, then flooded with the thread color. This was a deliberate
-fallback — I looked for a genuinely licensed (CC0/public-domain) thread
-or linen texture photo to use instead, but every external image host this
-session tried (ShareTextures, Negative Space, Wikimedia Commons) came
-back blocked by the environment's network egress policy. If you have a
-licensed texture image on hand, swapping it in is straightforward: it just
-needs to be a **repeating tile** (set as `background-image` alongside
-`background-repeat`), not a single image stretched across the input,
-since the input's width is responsive.
+Both buttons use `.glass-btn` — a frosted-glass treatment
+(`backdrop-filter: blur() saturate()`, translucent white fill, a light
+inset highlight) similar to Apple's UI glass. `#cart-btn` is currently
+a stub: there's no live storefront yet, so it just shows a toast
+("Cart opens at launch…") rather than opening anything. Wire it to a
+real cart once there's something to sell.
+
+## Background music
+
+`#bg-music` autoplays best-effort on load. Browsers block unmuted
+autoplay without a prior user gesture, so if that's blocked, playback
+starts on the very first interaction anywhere on the page instead
+(`initMusic` in `main.js`). `#mute-btn` toggles `.muted` independently
+of whether playback has actually started — if someone mutes before
+audio has unlocked, it'll start silently once it does.
 
 ## Text to update
 
@@ -81,6 +92,7 @@ since the input's width is responsive.
 | Tagline | `.tagline` text in `index.html` |
 | Instagram / social links | `.site-footer` in `index.html` |
 | Email signup endpoint | `initForm()` in `main.js` — currently a stub that just shows a confirmation message |
+| Cart behavior | `initCart()` in `main.js` — currently just a toast stub |
 
 ## Colors (`style.css` `:root`)
 
@@ -89,7 +101,8 @@ since the input's width is responsive.
 | `--color-accent` | `#C8511E` burnt terracotta |
 | `--color-hover` | `#F5C518` golden yellow |
 | `--color-section` | `#6B9976` aloe green |
-| `--color-bg` | `#F4E9D8` parchment |
+| `--color-bg` | `#E7DCC5` linen base tone |
+| `--color-thread` | `#5C2A1E` embroidery thread |
 
 ## Running locally
 
