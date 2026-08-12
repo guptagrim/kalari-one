@@ -13,6 +13,18 @@
 </head>
 <body>
 
+<!-- Global SVG filter defs (zero-size, never painted directly) — the
+     wrinkle-filter displaces the fabric background to fake creased cloth,
+     referenced via CSS `filter: url(#wrinkle-filter)` on .fabric-wrinkle. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <filter id="wrinkle-filter" x="-30%" y="-60%" width="160%" height="220%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.018 0.05" numOctaves="3" seed="7" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="36" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </defs>
+</svg>
+
 <!-- Background music: best-effort autoplay, falls back to starting on the
      first user interaction if the browser blocks it (see initMusic in
      main.js) — no visible controls, driven entirely by #mute-btn. -->
@@ -26,15 +38,12 @@
 
     <div class="toolbar">
       <button type="button" id="mute-btn" class="glass-btn" aria-pressed="false" aria-label="Mute background music">
-        <svg class="icon icon-sound" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M4 9v6h4l5 4V5L8 9H4Z"/>
-          <path d="M16.3 8.5a5 5 0 0 1 0 7"/>
-          <path d="M19 5.8a9 9 0 0 1 0 12.4"/>
-        </svg>
-        <svg class="icon icon-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" hidden>
-          <path d="M4 9v6h4l5 4V5L8 9H4Z"/>
-          <path d="M16 9l5.5 6M21.5 9 16 15"/>
-        </svg>
+        <span class="eq-bars" aria-hidden="true">
+          <span class="eq-bar"></span>
+          <span class="eq-bar"></span>
+          <span class="eq-bar"></span>
+          <span class="eq-bar"></span>
+        </span>
       </button>
 
       <button type="button" id="cart-btn" class="glass-btn" aria-label="View cart">
@@ -59,10 +68,12 @@
       <label for="notify-email" class="visually-hidden">Email address</label>
       <div class="stitch-wrap">
         <input id="notify-email" type="email" name="email" placeholder="Your email address" required>
-        <!-- drawn/redrawn by main.js (drawHandStitch) to match the input's
-             live rendered size — see README for why this can't be a static
-             asset or a plain CSS dashed border -->
+        <!-- Intro sequence (first paint only): wrinkled fabric, sewn flat
+             by an animated needle. All three layers are drawn/driven by
+             main.js — see README for why this can't be static markup. -->
+        <div class="fabric-wrinkle" aria-hidden="true"></div>
         <svg class="stitch-svg" aria-hidden="true" focusable="false"></svg>
+        <svg class="needle-svg" aria-hidden="true" focusable="false"></svg>
       </div>
       <button type="submit">
         <span class="btn-label">Notify me</span>
