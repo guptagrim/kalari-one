@@ -33,15 +33,15 @@ button,input{overflow:visible}button,select{text-transform:none}
   --color-bg:        #E7DCC5;   /* base tone under the linen weave */
   --color-thread:    #5C2A1E;   /* embroidery thread */
 
-  /* Procedural linen weave: alternating warp/weft bars (fakes the
-     over/under thread pattern) plus the same fiber-grain noise used on
-     the notify input, so the whole page reads as one consistent fabric
-     system. Vector, so it tiles at any resolution with zero quality
-     loss — actually a better fit than a raster photo repeat here, since
-     a stretched/tiled photo would show visible seams or blur when
-     scaled. Couldn't source a real licensed photo — same network-policy
-     wall as the button texture (see README). */
-  --linen-fabric: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28'%3E%3Crect width='28' height='28' fill='%23E7DCC5'/%3E%3Cg fill='%23DACCAE'%3E%3Crect x='0' width='3' height='28'/%3E%3Crect x='7' width='3' height='28'/%3E%3Crect x='14' width='3' height='28'/%3E%3Crect x='21' width='3' height='28'/%3E%3C/g%3E%3Cg fill='%23F2E8D4' opacity='0.65'%3E%3Crect y='0' width='28' height='3'/%3E%3Crect y='7' width='28' height='3'/%3E%3Crect y='14' width='28' height='3'/%3E%3Crect y='21' width='28' height='3'/%3E%3C/g%3E%3Cfilter id='w' color-interpolation-filters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch' result='t'/%3E%3CfeColorMatrix in='t' type='matrix' values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0.4 0.4 0.4 0 0' result='a'/%3E%3CfeComponentTransfer in='a' result='a2'%3E%3CfeFuncA type='discrete' tableValues='0 0.06 0.1 0.16 0.22'/%3E%3C/feComponentTransfer%3E%3CfeFlood flood-color='%238A7A5C' result='c'/%3E%3CfeComposite in='c' in2='a2' operator='in'/%3E%3C/filter%3E%3Crect width='28' height='28' filter='url(%23w)'/%3E%3C/svg%3E");
+  /* Real linen photo, tiled — see html's background-size/-repeat below.
+     Uses linen-tile.jpg, not the raw photo: a flat product shot doesn't
+     loop cleanly on its own (repeating it straight shows a visible seam
+     at every tile edge). linen-tile.jpg is a 2x2 mirrored composite —
+     each copy is flipped so it's a mirror image of its neighbors, which
+     makes every shared edge identical by construction. CSS tiling
+     instead of one giant pre-stitched image: same visual result, one
+     small cached file instead of a huge one. */
+  --linen-fabric: url('public/img/linen-tile.jpg');
 
   /* Procedural fiber-grain: SVG fractal noise → alpha mask → flooded with
      the thread color. Not a photo (couldn't reach any image host from this
@@ -66,6 +66,8 @@ html {
   -webkit-font-smoothing: antialiased;
   background-color: var(--color-bg);
   background-image: var(--linen-fabric);
+  background-repeat: repeat;
+  background-size: 560px 560px;
   color: var(--color-text);
   font-family: var(--font-body);
   font-weight: var(--font-weight-regular);
