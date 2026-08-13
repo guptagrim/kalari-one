@@ -219,6 +219,7 @@
   if (!audio || !muteBtn) return;
 
   audio.volume = 0.5;
+  let nudgeTimer;
 
   function updateButton() {
     const muted = audio.muted;
@@ -226,21 +227,36 @@
     muteBtn.setAttribute('aria-label', muted ? 'Unmute background music' : 'Mute background music');
   }
 
-  function tryPlay() {
-    audio.play().catch(() => {
-      const startOnGesture = () => audio.play().catch(() => {});
+  function stopNudge() {
+    clearTimeout(nudgeTimer);
+    muteBtn.classList.remove('is-nudging');
+  }
+
+  // Only worth inviting the gesture if autoplay actually got blocked —
+  // give the initial play() a moment to resolve/reject before deciding.
+  function scheduleNudge() {
+    nudgeTimer = setTimeout(() => {
+      if (audio.paused) muteBtn.classList.add('is-nudging');
+    }, 1200);
+  }
+
+  function tryPlay(isInitial) {
+    audio.play().then(stopNudge).catch(() => {
+      if (isInitial) scheduleNudge();
+      const startOnGesture = () => audio.play().then(stopNudge).catch(() => {});
       document.addEventListener('pointerdown', startOnGesture, { once: true });
       document.addEventListener('keydown', startOnGesture, { once: true });
     });
   }
 
-  tryPlay();
+  tryPlay(true);
   updateButton();
 
   muteBtn.addEventListener('click', () => {
+    stopNudge(); // clicking the control at all means the nudge did its job
     audio.muted = !audio.muted;
     updateButton();
-    if (audio.paused) tryPlay();
+    if (audio.paused) tryPlay(false);
   });
 })();
 

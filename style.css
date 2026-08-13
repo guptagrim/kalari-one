@@ -186,6 +186,29 @@ img { max-width: 100%; }
   top: -4px;
 }
 
+/* Nudge: a ring pulses outward from the mute button while music is
+   blocked and waiting for a first click/tap/keypress to unlock it (see
+   initMusic in main.js). Runs a fixed number of cycles, then stops on
+   its own — it's inviting one specific gesture, not a permanent fixture
+   competing with the actual signup CTA. Stopped early the moment
+   playback actually starts. */
+#mute-btn::after {
+  border: 2px solid var(--color-accent);
+  border-radius: 999px;
+  content: "";
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+}
+#mute-btn.is-nudging::after {
+  animation: nudge-ring 1.8s ease-out 3;
+}
+@keyframes nudge-ring {
+  0%   { opacity: .9; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.9); }
+}
+
 /* ── Hero ── */
 .hero {
   align-items: center;

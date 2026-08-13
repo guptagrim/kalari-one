@@ -114,11 +114,22 @@ anything. Wire it to a real cart once there's something to sell.
 ## Background music
 
 `#bg-music` autoplays best-effort on load. Browsers block unmuted
-autoplay without a prior user gesture, so if that's blocked, playback
-starts on the very first interaction anywhere on the page instead
-(`initMusic` in `main.js`). `#mute-btn` toggles `.muted` independently
-of whether playback has actually started — if someone mutes before
-audio has unlocked, it'll start silently once it does.
+autoplay without a prior user gesture — genuinely no exceptions; scroll
+doesn't count as a gesture either, only click/tap/keydown do — so if
+autoplay is blocked, playback starts on the very first qualifying
+interaction anywhere on the page instead (`initMusic` in `main.js`).
+`#mute-btn` toggles `.muted` independently of whether playback has
+actually started — if someone mutes before audio has unlocked, it'll
+start silently once it does.
+
+**Nudge:** if autoplay was blocked, `#mute-btn` gets `.is-nudging` ~1.2s
+after load, which plays a soft ring pulsing outward from the button
+(`nudge-ring` keyframes in `style.css`) — an invitation to click, not
+an instruction. It's capped at 3 cycles even if ignored, and stops
+immediately either when playback actually starts or the button gets
+clicked at all (`stopNudge` in `main.js`) — it's inviting one specific
+gesture, not a permanent fixture competing with the signup form, which
+is the page's actual job.
 
 ## Text to update
 
