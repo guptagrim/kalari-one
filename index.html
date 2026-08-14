@@ -13,18 +13,6 @@
 </head>
 <body>
 
-<!-- Global SVG filter defs (zero-size, never painted directly) — the
-     wrinkle-filter displaces the fabric background to fake creased cloth,
-     referenced via CSS `filter: url(#wrinkle-filter)` on .fabric-wrinkle. -->
-<svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <defs>
-    <filter id="wrinkle-filter" x="-30%" y="-60%" width="160%" height="220%">
-      <feTurbulence type="fractalNoise" baseFrequency="0.018 0.05" numOctaves="3" seed="7" result="noise"/>
-      <feDisplacementMap in="SourceGraphic" in2="noise" scale="36" xChannelSelector="R" yChannelSelector="G"/>
-    </filter>
-  </defs>
-</svg>
-
 <!-- Background music: best-effort autoplay, falls back to starting on the
      first user interaction if the browser blocks it (see initMusic in
      main.js) — no visible controls, driven entirely by #mute-btn. -->
@@ -68,12 +56,6 @@
       <label for="notify-email" class="visually-hidden">Email address</label>
       <div class="stitch-wrap">
         <input id="notify-email" type="email" name="email" placeholder="Your email address" required>
-        <!-- Intro sequence (first paint only): wrinkled fabric, sewn flat
-             by an animated needle. All three layers are drawn/driven by
-             main.js — see README for why this can't be static markup. -->
-        <div class="fabric-wrinkle" aria-hidden="true"></div>
-        <svg class="stitch-svg" aria-hidden="true" focusable="false"></svg>
-        <svg class="needle-svg" aria-hidden="true" focusable="false"></svg>
       </div>
       <button type="submit">
         <span class="btn-label">Notify me</span>
