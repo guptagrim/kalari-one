@@ -43,13 +43,6 @@ button,input{overflow:visible}button,select{text-transform:none}
      small cached file instead of a huge one. */
   --linen-fabric: url('public/img/linen-tile.jpg');
 
-  /* Procedural fiber-grain: SVG fractal noise → alpha mask → flooded with
-     the thread color. Not a photo (couldn't reach any image host from this
-     session — every external domain tried came back network-policy-blocked),
-     but it's real generated grain, not a flat gradient. Tiles at 140x140px
-     so it stays correct at any element size, unlike a stretched photo. */
-  --fabric-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n' color-interpolation-filters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='1' stitchTiles='stitch' result='t'/%3E%3CfeColorMatrix in='t' type='matrix' values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0.33 0.33 0.33 0 0' result='a'/%3E%3CfeComponentTransfer in='a' result='a2'%3E%3CfeFuncA type='discrete' tableValues='0 0 0 0.18 0.34 0.55 0.75'/%3E%3C/feComponentTransfer%3E%3CfeFlood flood-color='%235C2A1E' result='c'/%3E%3CfeComposite in='c' in2='a2' operator='in'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-
   --font-body: 'Eskool', sans-serif;
   --font-display: 'Monotonia', serif;
   --font-weight-regular: 400;
@@ -186,6 +179,29 @@ img { max-width: 100%; }
   top: -4px;
 }
 
+/* Nudge: a ring pulses outward from the mute button while music is
+   blocked and waiting for a first click/tap/keypress to unlock it (see
+   initMusic in main.js). Runs a fixed number of cycles, then stops on
+   its own — it's inviting one specific gesture, not a permanent fixture
+   competing with the actual signup CTA. Stopped early the moment
+   playback actually starts. */
+#mute-btn::after {
+  border: 2px solid var(--color-accent);
+  border-radius: 999px;
+  content: "";
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+}
+#mute-btn.is-nudging::after {
+  animation: nudge-ring 1.8s ease-out 3;
+}
+@keyframes nudge-ring {
+  0%   { opacity: .9; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.9); }
+}
+
 /* ── Hero ── */
 .hero {
   align-items: center;
@@ -238,68 +254,16 @@ img { max-width: 100%; }
   min-width: 0;
   position: relative;
 }
-/* Hand-stitch outline: drawn by main.js (drawHandStitch), not CSS. A
-   native `border: dashed` is mathematically perfect — identical dash
-   length, identical gap, every time — which reads as printed, not sewn.
-   Real stitching wanders: length varies, spacing varies, the needle
-   angle wobbles. That irregularity has to come from code that jitters
-   each stitch individually, redrawn to match the input's live size via
-   ResizeObserver since border-image/a fixed SVG can't stay responsive. */
-.stitch-svg {
-  height: 100%;
-  left: 0;
-  overflow: visible;
-  pointer-events: none;
-  position: absolute;
-  top: 0;
-  width: 100%;
-  z-index: 2;
-}
-
-/* Intro sequence, first paint only: wrinkled fabric → needle sews around
-   the edge → fabric relaxes flat. See drawHandStitch in main.js. */
-.fabric-wrinkle {
-  background-color: var(--color-white);
-  background-image:
-    var(--fabric-grain),
-    radial-gradient(ellipse 45% 220% at 14% 50%, rgba(0,0,0,.30), transparent 70%),
-    radial-gradient(ellipse 35% 220% at 38% 50%, rgba(255,255,255,.75), transparent 65%),
-    radial-gradient(ellipse 45% 220% at 62% 50%, rgba(0,0,0,.26), transparent 70%),
-    radial-gradient(ellipse 35% 220% at 84% 50%, rgba(255,255,255,.7), transparent 65%),
-    radial-gradient(ellipse 60% 45% at 50% 0%, rgba(0,0,0,.22), transparent 75%);
-  background-blend-mode: multiply, multiply, screen, multiply, screen, multiply;
-  border-radius: 999px;
-  filter: url(#wrinkle-filter);
-  height: 100%;
-  left: 0;
-  overflow: hidden;
-  position: absolute;
-  top: 0;
-  transition: opacity .9s ease;
-  width: 100%;
-  z-index: 1;
-}
-.fabric-wrinkle.is-flat { opacity: 0; }
-
-.needle-svg {
-  height: 100%;
-  left: 0;
-  overflow: visible;
-  pointer-events: none;
-  position: absolute;
-  top: 0;
-  transition: opacity .3s ease;
-  width: 100%;
-  z-index: 3;
-}
-.needle-svg.is-done { opacity: 0; }
+/* Plain, functional placeholder — the embroidery/stitch/wrinkle system
+   (and the pointer-events bug it introduced, see README) is gone. Once
+   the real PNG frame asset is available, this becomes a border-image
+   treatment: see README for why border-image (not background-image)
+   is the right tool for a raster asset with fixed end details that
+   need to survive a responsive width. */
 .notify-form input {
   background-color: var(--color-white);
-  background-image: var(--fabric-grain);
-  background-blend-mode: multiply;
-  border: none;
+  border: 1px solid rgba(26, 20, 16, .2);
   border-radius: 999px;
-  box-shadow: inset 0 0 0 1px rgba(0,0,0,.08);
   color: var(--color-black);
   font-size: 15px;
   padding: 16px 24px;

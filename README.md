@@ -8,13 +8,16 @@ build step, no framework — just open `index.html`.
 ```
 index.html          markup
 style.css            design tokens + layout
-main.js              hand-stitch renderer, music, cart stub, signup form
+main.js              music, cart stub, signup form
 public/
   fonts/
     Monotonia.otf    wordmark display font (user-supplied)
     Eskool.ttf       body/display font, used everywhere else (user-supplied)
   audio/
     zen.mp3          background music (user-supplied)
+  img/
+    linen.jpg        linen reference photo, as supplied (user-supplied)
+    linen-tile.jpg   linen.jpg, prepared for seamless tiling (generated — see below)
 ```
 
 ## Fonts
@@ -31,70 +34,59 @@ silently render in mixed case despite `html`'s rule.
 
 ## The linen background
 
-`html`'s `background-image` (`--linen-fabric` in `:root`) is a
-**procedurally generated** SVG tile — alternating warp/weft bars faking
-a woven over/under pattern, plus the same fiber-grain noise filter used
-on the notify input, so the whole page reads as one fabric system.
+`html`'s `background-image` (`--linen-fabric` in `:root`) is the real
+supplied photo — `public/img/linen-tile.jpg`, not `linen.jpg` directly.
+The raw photo doesn't loop cleanly on its own (repeating a flat product
+shot straight shows a visible seam at every tile edge, since it wasn't
+shot/prepared as a seamless texture). `linen-tile.jpg` is a 2x2 mirrored
+composite generated from it — each quadrant is flipped so it's a mirror
+image of its neighbors, which makes every shared edge identical by
+construction, with no visible seam. Tiled via `background-repeat: repeat`
++ `background-size` on `html`.
 
-This is a placeholder for a real reference photo that couldn't be turned
-into a file across several attempts: it kept getting pasted inline into
-the conversation rather than uploaded as an attachment, and this
-environment doesn't save pasted images to disk the way it does file
-attachments (only the latter get a path I can read) — there's no way for
-me to extract it from here. I also tried sourcing a licensed replacement
-online; every external image host this session tried (ShareTextures,
-Negative Space, Wikimedia Commons, CadNav, Fuzzimo) came back blocked by
-the environment's network egress policy. The most reliable path for a
-real photo: commit it straight into this repo (e.g. via the GitHub web
-UI into `public/img/`) rather than pasting it into chat.
+If you get a new/different reference photo later, regenerate the tile
+rather than pointing `--linen-fabric` straight at it:
 
-**Swapping in a real photo:** replace `--linen-fabric`'s value with
-`url("your-image.jpg")` and add `background-size: <tile-px>` alongside
-`background-repeat: repeat` on `html`. It needs to be an actual seamless
-tile (no visible edge when repeated) — a plain crop of a fabric photo
-usually shows a seam. Vector textures like the current one tile perfectly
-at any resolution for free; a raster photo needs to be prepared for
-seamless tiling first (most photo editors have a "make seamless" /
-offset-and-heal workflow for this).
+```python
+from PIL import Image, ImageOps
+img = Image.open('public/img/linen.jpg').convert('RGB')
+w, h = img.size
+tile = Image.new('RGB', (w * 2, h * 2))
+tile.paste(img, (0, 0))
+tile.paste(ImageOps.mirror(img), (w, 0))
+tile.paste(ImageOps.flip(img), (0, h))
+tile.paste(ImageOps.flip(ImageOps.mirror(img)), (w, h))
+tile.save('public/img/linen-tile.jpg', quality=90)
+```
 
-## The hand-stitched email input
+## The email input
 
-`.stitch-wrap` (wraps the `<input>` in the notify form) is outlined by
-`initHandStitch` in `main.js` — **not** a CSS `border`. A native
-`border: dashed` is mathematically perfect (identical dash length,
-identical gap, every time), which reads as printed rather than sewn.
-Real stitching wanders: length varies, spacing varies, the needle angle
-wobbles slightly off-perpendicular. To get that, each stitch is drawn
-individually as an SVG `<line>` with randomized length, spacing, angle,
-and position jitter, walking two rings around the input's rounded-pill
-outline (outer ring in `--color-thread`, inner ring in `--color-accent`,
-at a different perimeter so their spacing falls out of phase — like two
-separate passes of hand-stitching rather than one repeating pattern).
+Plain and functional right now — white fill, a thin solid border, a
+visible focus outline — while waiting on a supplied PNG "frame" asset
+to replace it (a rectangular fabric swatch with frayed fringe on the
+short ends).
 
-Since a fixed-size SVG or `border-image` can't track a responsive
-width, and a plain CSS border can't be made irregular, this redraws on
-a `ResizeObserver` bound to `.stitch-wrap` — it regenerates a fresh
-random pattern any time the input's rendered size changes.
+**This used to be different, and it broke the input.** There was a
+hand-stitched-border system here (individually-jittered SVG stitches,
+plus a wrinkled-fabric-to-flat intro animation) that got scrapped for
+two reasons: it wasn't the desired look, and — this is the important
+part — `.fabric-wrinkle`, one of its overlay layers, was positioned
+directly on top of the `<input>` without `pointer-events: none`. That
+silently absorbed every click, so the field couldn't be focused or
+typed into at all. It's a good example of why a decorative overlay
+positioned over a real form control always needs an explicit
+`pointer-events: none` — the browser doesn't know the layer is "just
+visual," it just sees the topmost element in the stack. If you add any
+future overlay inside `.stitch-wrap`, give it `pointer-events: none`
+unless it genuinely needs to catch clicks.
 
-The fill texture (`--fabric-grain` in `:root`) is separately generated —
-an SVG `feTurbulence` noise filter, thresholded for visible cellular
-structure, flooded with the thread color. Same "couldn't reach a real
-texture photo" situation as the background above.
-
-**First-load intro:** the field starts as wrinkled fabric — `.fabric-
-wrinkle`, a `feDisplacementMap` SVG filter (`#wrinkle-filter` in
-`index.html`) warping the fabric fill, plus layered radial-gradient
-shadow/highlight bands for fold depth — and a small SVG needle
-(`.needle-svg`) travels the outline, revealing each stitch as it passes
-that stitch's position. The wrinkle fades out on its own CSS transition
-running concurrently with the needle's pass, rather than being tied
-segment-by-segment to the needle's exact position — a simpler "global
-crossfade" version of the effect vs. a fully-synced one, by design.
-
-This only plays once, on the very first draw. `ResizeObserver`-triggered
-redraws after that (window resize, orientation change) skip straight to
-the finished state — replaying the full wrinkle→sew→flatten sequence on
-every resize would get old fast on a page people revisit before launch.
+**Once the PNG frame asset is in hand:** the right tool is CSS
+`border-image`, not `background-image`. The photo has fixed detail at
+the two short ends (fringe) that shouldn't stretch, with a plain
+stretchable middle — exactly what `border-image-slice` /
+`border-image-repeat` are for (3-slice horizontally: left cap, middle,
+right cap), and it stays correct at any input width without distorting
+the fringe, which a stretched `background-image` would.
 
 ## Header toolbar (mute + cart)
 
@@ -114,11 +106,22 @@ anything. Wire it to a real cart once there's something to sell.
 ## Background music
 
 `#bg-music` autoplays best-effort on load. Browsers block unmuted
-autoplay without a prior user gesture, so if that's blocked, playback
-starts on the very first interaction anywhere on the page instead
-(`initMusic` in `main.js`). `#mute-btn` toggles `.muted` independently
-of whether playback has actually started — if someone mutes before
-audio has unlocked, it'll start silently once it does.
+autoplay without a prior user gesture — genuinely no exceptions; scroll
+doesn't count as a gesture either, only click/tap/keydown do — so if
+autoplay is blocked, playback starts on the very first qualifying
+interaction anywhere on the page instead (`initMusic` in `main.js`).
+`#mute-btn` toggles `.muted` independently of whether playback has
+actually started — if someone mutes before audio has unlocked, it'll
+start silently once it does.
+
+**Nudge:** if autoplay was blocked, `#mute-btn` gets `.is-nudging` ~1.2s
+after load, which plays a soft ring pulsing outward from the button
+(`nudge-ring` keyframes in `style.css`) — an invitation to click, not
+an instruction. It's capped at 3 cycles even if ignored, and stops
+immediately either when playback actually starts or the button gets
+clicked at all (`stopNudge` in `main.js`) — it's inviting one specific
+gesture, not a permanent fixture competing with the signup form, which
+is the page's actual job.
 
 ## Text to update
 
