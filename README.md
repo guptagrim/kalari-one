@@ -17,6 +17,9 @@ public/
   audio/
     zen.mp3          unused — music was dropped from this design
   img/
+    gallery-1.jpg    gallery photo 1 (user-supplied, was DSC02083.JPG)
+    gallery-2.jpg    gallery photo 2 (user-supplied, was number2.png)
+    gallery-3.jpg    gallery photo 3 (user-supplied, was number3.png)
     linen.jpg        unused — background is flat cream now, not a photo texture
     linen-tile.jpg   unused, same reason
 ```
@@ -64,13 +67,25 @@ drag or scroll.
 plain vertical flex column, each image full-width, in the normal
 document flow.
 
-**Placeholder images:** the three `<img>` tags currently point to
-inline SVG data URIs (labeled "Photo 1/2/3") sized to a 3:4 portrait
-aspect ratio. Swapping in real photos is a one-line change per image —
-just replace the `src`, no structural changes needed. If the real
-photos have a different aspect ratio, the layout adapts automatically
-since image width is `auto` at a fixed height (desktop) or width
-`100%` at auto height (mobile) — no hardcoded dimensions to update.
+**Images:** `gallery-1/2/3.jpg` in `public/img/`, as supplied (originally
+`DSC02083.JPG`, `number2.png`, `number3.png` — renamed for clarity, and
+each processed before committing):
+
+- `DSC02083.JPG` was a 14.7MB, 6000×4000 camera original with an EXIF
+  rotation tag (`Orientation: 6`) rather than upright pixels — some
+  viewers respect that tag and some don't, so rather than gamble on
+  every browser/context rendering it correctly, the rotation was baked
+  into the actual pixels (`ImageOps.exif_transpose`) before resizing.
+- All three were resized to a 2200px long edge and re-saved as
+  optimized JPEGs (quality 85) — combined they went from ~20MB to
+  ~1MB. `number2.png`/`number3.png` were RGBA but fully opaque (no
+  actual transparency in use), so converting PNG → JPEG lost nothing
+  visible while cutting file size dramatically.
+
+If a future photo has a different aspect ratio than these, the layout
+adapts automatically since image width is `auto` at a fixed height
+(desktop) or width `100%` at auto height (mobile) — no hardcoded
+dimensions to update either way.
 
 ## The footer
 

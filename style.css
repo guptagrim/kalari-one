@@ -270,8 +270,7 @@ img { max-width: 100%; }
 }
 .site-footer a {
   color: var(--color-black);
-  text-decoration: underline;
-  text-underline-offset: 3px;
+  text-decoration: none;
 }
 .site-footer a:hover { color: var(--color-accent); }
 
