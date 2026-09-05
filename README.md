@@ -11,6 +11,7 @@ style.css            design tokens + layout
 main.js              gallery drag/wheel-scroll, cart stub, signup form
 public/
   fonts/
+    ClarendonMT.otf  body/display font (user-supplied)
     Monotonia.otf    unused — from an earlier design direction, kept in case it's wanted again
     Eskool.ttf       unused — same
   audio/
@@ -24,19 +25,26 @@ public/
 
 This replaced an earlier embroidery/linen-texture aesthetic (stitched
 borders, wrinkled-fabric animations, a photo-tiled background — see git
-history if any of that is wanted back). The current direction is
-intentionally plain and minimal:
+history if any of that is wanted back). It briefly went through a
+Jost/sans-serif phase too (also in git history) before landing here.
+Current direction:
 
-- **Font:** Jost, loaded from Google Fonts — the same open-source
-  typeface (SIL OFL licensed) used on a reference site the design was
-  modeled after. Using the same freely-licensed font isn't the same as
-  copying that site's content or design; it's a font choice anyone can
-  make. `--font-body` in `style.css`.
-- **Background:** flat cream (`--color-bg`), no texture or photo.
-- **Buttons/inputs:** sharp corners (no `border-radius`), flat — no
-  shadows, no gradients, no glassmorphism.
-- **Header:** wordmark + a single flat cart icon button (`.icon-btn`).
-  No background music, so no mute control either.
+- **Font:** Clarendon MT Std (user-supplied), a serif — `--font-body`
+  in `style.css`.
+- **Background:** flat off-white (`--color-bg: #FFFBF4`), no texture
+  or photo.
+- **Buttons/inputs:** sharp corners (no `border-radius` on
+  inputs/buttons — `.icon-btn` is the one deliberate exception, a
+  circular hover halo behind the cart icon, a different and common
+  convention for icon buttons specifically, not a contradiction of
+  the sharp-corners rule for text buttons/inputs). Flat fills, no
+  shadows/gradients/glassmorphism. Hover states are a soft charcoal
+  shift (`#38302A`) rather than a full color invert, and button labels
+  are sentence case at a normal reading size rather than tiny
+  tracked-out uppercase — both changes from an earlier pass that read
+  as too harsh against a serif typeface.
+- **Header:** wordmark + a single flat cart icon button. No background
+  music, so no mute control either.
 
 ## The gallery
 
@@ -68,36 +76,39 @@ since image width is `auto` at a fixed height (desktop) or width
 
 Three-column layout: placeholder utility links (left, all `href="#"` —
 no real pages exist yet), wordmark + copyright (center, text only —
-no logo file yet), Instagram (right). Above it, a newsletter block
-with a 10%-off incentive, separate from the main "Notify me" signup
-in `.signup` — both are real, intentionally: the mid-page one converts
-visitors immediately, the footer one catches anyone who scrolls past
-without signing up there. Both post through the same stub — see
-`bindSignupForm` in `main.js`, which both `#notify-form` and
-`#newsletter-form` share rather than duplicating the submit logic.
+no logo file yet), Instagram (right).
 
-This was modeled on a footer structure from another real Shopify
-store, structure only — not its content. That reference's actual code
-wasn't usable as-is for reasons beyond style: its form posted to that
-business's live Klaviyo mailing list (a hardcoded list ID tied to
-their account — using it verbatim would've sent your customers' emails
-into a different company's marketing list), its newsletter image was
-hotlinked from their CDN, its footer included a B-Corp certification
-badge (a real, audited status — not decoration to reuse), and its nav/
-social links and copyright all pointed at their business. None of that
-is in this version.
+There's deliberately only **one** email signup on the page, not two.
+An earlier pass had a second "10% off" newsletter form here in the
+footer alongside the mid-page "Notify me" one — same stub handler,
+different pitch — which turned out to be redundant, and "10% off your
+first order" doesn't really make sense pre-launch anyway (there's no
+first order yet to discount). The incentive copy now lives on the one
+remaining form in `.signup`, and the footer is back to just links/
+wordmark/social. `bindSignupForm` in `main.js` is still written as a
+reusable helper in case a second form is ever wanted again.
+
+The three-column structure was modeled on a footer from another real
+Shopify store — structure only, never its content. That reference's
+actual code wasn't reusable regardless of style: its form posted to
+that business's live Klaviyo mailing list (a hardcoded list ID tied to
+their account), its newsletter image was hotlinked from their CDN, it
+displayed a B-Corp certification badge (a real audited status, not
+decoration), and its nav/social links and copyright all pointed at
+their business. None of that is in this version — go check that
+reference yourself if you want confirmation it wasn't just superficial
+theme boilerplate anyway.
 
 ## Text to update
 
 | What | Where |
 |---|---|
 | Gallery images | `src` on the three `.gallery-item img` tags in `index.html` |
-| Launch date | `.launch-date` text in `index.html` |
+| Launch date / incentive copy | `.launch-date` text in `index.html` |
 | Tagline | `.tagline` text in `index.html` |
 | Footer links (Sizing/Returns/Shipping/FAQ) | `.footer-col-left` in `index.html` — currently all `href="#"` |
-| Newsletter incentive copy | `.newsletter-title` text in `index.html` |
 | Instagram / social links | `.footer-col-right` in `index.html` |
-| Email signup endpoint | `bindSignupForm()` calls in `main.js` — currently a stub that just shows a confirmation message |
+| Email signup endpoint | `bindSignupForm('notify-form', ...)` call in `main.js` — currently a stub that just shows a confirmation message |
 | Cart behavior | `initCart()` in `main.js` — currently just a toast stub |
 
 ## Colors (`style.css` `:root`)
@@ -105,8 +116,8 @@ is in this version.
 | Variable | Current value |
 |---|---|
 | `--color-accent` | `#C8511E` burnt terracotta |
-| `--color-hover` | `#F5C518` golden yellow |
-| `--color-bg` | `#F7F2E6` flat cream |
+| `--color-hover` | `#F5C518` golden yellow (currently unused after the button-hover redesign — was the old invert-hover color) |
+| `--color-bg` | `#FFFBF4` flat off-white |
 
 ## Running locally
 

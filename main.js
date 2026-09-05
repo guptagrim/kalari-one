@@ -105,8 +105,7 @@ function bindSignupForm(formId, statusId, successMessage) {
     button.disabled = false;
   });
 }
-bindSignupForm('notify-form', 'notify-status', "You're on the list.");
-bindSignupForm('newsletter-form', 'newsletter-status', "You're in — check your inbox for your code.");
+bindSignupForm('notify-form', 'notify-status', "You're in — check your inbox for your code.");
 
 // ── Footer year ───────────────────────────────────────────
 (function initYear() {

@@ -7,12 +7,13 @@ button,input{overflow:visible}button,select{text-transform:none}
 [type=button],[type=reset],[type=submit],button{-webkit-appearance:button}
 
 /* ── Fonts ── */
-/* Jost — same family used on lunadelpinal.com (a genuinely open,
-   SIL-OFL-licensed Google Font; using the same open typeface a site
-   happens to use isn't the same as copying its content/design — it's
-   just a font choice anyone can make). Loaded from Google Fonts, not
-   their CDN copy. */
-@import url('https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+@font-face {
+  font-family: 'Clarendon MT Std';
+  src: url('public/fonts/ClarendonMT.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
 
 /* ── Design tokens ── */
 :root {
@@ -22,9 +23,9 @@ button,input{overflow:visible}button,select{text-transform:none}
   --color-white:     #fff;
   --color-black:     #1A1410;
   --color-text:      var(--color-black);
-  --color-bg:        #F7F2E6;   /* flat cream — no texture/photo this time */
+  --color-bg:        #FFFBF4;
 
-  --font-body: 'Jost', sans-serif;
+  --font-body: 'Clarendon MT Std', Georgia, serif;
   --font-weight-regular: 400;
   --font-weight-medium: 400;
   --font-weight-bold: 700;
@@ -90,21 +91,25 @@ img { max-width: 100%; }
   align-items: center;
   background: none;
   border: none;
+  border-radius: 50%;
   color: var(--color-black);
   cursor: pointer;
   display: flex;
-  height: 32px;
+  height: 38px;
   justify-content: center;
-  opacity: .85;
+  opacity: .8;
   padding: 0;
   position: relative;
-  transition: opacity .15s;
-  width: 32px;
+  transition: opacity .15s, background-color .15s;
+  width: 38px;
 }
 .icon-btn:hover,
-.icon-btn:focus-visible { opacity: 1; }
-.icon-btn:focus-visible { outline: 1px solid var(--color-black); outline-offset: 3px; }
-.icon-btn .icon { height: 21px; width: 21px; }
+.icon-btn:focus-visible {
+  background-color: rgba(26, 20, 16, .06);
+  opacity: 1;
+}
+.icon-btn:focus-visible { outline: 1px solid var(--color-black); outline-offset: 2px; }
+.icon-btn .icon { height: 20px; width: 20px; }
 .cart-count[hidden] { display: none; }
 .cart-count {
   align-items: center;
@@ -206,14 +211,16 @@ img { max-width: 100%; }
   text-transform: uppercase;
 }
 
-/* ── Notify form — sharp corners, flat, matching the minimal reference
-   (no border-radius/pill shape this time) ── */
+/* ── Notify form — sharp corners, flat. Typography-led buttons rather
+   than the previous tiny-uppercase treatment: sentence case at a
+   readable size reads calmer against a serif typeface, and the hover
+   is a soft charcoal shift instead of a full white/black invert. ── */
 .notify-form {
   display: flex;
   gap: 0;
   margin: 24px 0 0;
   width: 100%;
-  max-width: 400px;
+  max-width: 420px;
 }
 .notify-form input {
   background-color: var(--color-white);
@@ -221,9 +228,9 @@ img { max-width: 100%; }
   border-right: none;
   color: var(--color-black);
   flex: 1;
-  font-size: 13px;
+  font-size: 15px;
   min-width: 0;
-  padding: 13px 16px;
+  padding: 14px 18px;
 }
 .notify-form input::placeholder { color: #999; }
 .notify-form input:focus { outline: 1px solid var(--color-black); outline-offset: -1px; }
@@ -232,18 +239,15 @@ img { max-width: 100%; }
   border: 1px solid var(--color-black);
   color: var(--color-white);
   cursor: pointer;
-  font-size: 12px;
-  font-weight: var(--font-weight-bold);
-  letter-spacing: .08em;
-  padding: 13px 20px;
-  text-transform: uppercase;
-  transition: background-color .15s, color .15s, border-color .15s;
+  font-size: 15px;
+  letter-spacing: .02em;
+  padding: 14px 26px;
+  transition: background-color .2s ease;
   white-space: nowrap;
 }
 .notify-form button:hover,
 .notify-form button:focus-visible {
-  background: var(--color-white);
-  color: var(--color-black);
+  background: #38302A;
 }
 .notify-form button[disabled] { cursor: default; opacity: .6; }
 
@@ -270,57 +274,6 @@ img { max-width: 100%; }
   text-underline-offset: 3px;
 }
 .site-footer a:hover { color: var(--color-accent); }
-
-/* Newsletter — same "get X% off" incentive pattern as the reference,
-   own copy/copy target. No image block: none was supplied, and this
-   stays text-only rather than guess at one. */
-.newsletter-form {
-  margin: 0 auto 48px;
-  max-width: 440px;
-  text-align: center;
-}
-.newsletter-title {
-  font-size: 13px;
-  line-height: 1.5;
-  margin: 0 0 16px;
-}
-.newsletter-inputs {
-  display: flex;
-}
-.newsletter-inputs input {
-  background-color: var(--color-white);
-  border: 1px solid rgba(26, 20, 16, .3);
-  border-right: none;
-  color: var(--color-black);
-  flex: 1;
-  font-size: 13px;
-  min-width: 0;
-  padding: 12px 14px;
-}
-.newsletter-inputs input::placeholder { color: #999; }
-.newsletter-inputs input:focus { outline: 1px solid var(--color-black); outline-offset: -1px; }
-.newsletter-inputs button {
-  background: var(--color-black);
-  border: 1px solid var(--color-black);
-  color: var(--color-white);
-  cursor: pointer;
-  font-size: 11px;
-  font-weight: var(--font-weight-bold);
-  letter-spacing: .08em;
-  padding: 12px 18px;
-  text-transform: uppercase;
-  transition: background-color .15s, color .15s;
-}
-.newsletter-inputs button:hover,
-.newsletter-inputs button:focus-visible {
-  background: var(--color-white);
-  color: var(--color-black);
-}
-.newsletter-status {
-  font-size: 12px;
-  height: 1.2em;
-  margin: 10px 0 0;
-}
 
 /* Three-column layout: placeholder links (left) / wordmark + copyright
    (center) / social (right) — left-aligned links per direction, rather
