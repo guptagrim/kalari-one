@@ -1,55 +1,65 @@
-/* Kalari Studios — main.js */
+/* Kalari Studio — main.js */
 
-// ── Background music ──────────────────────────────────────
-// Browsers block unmuted autoplay without a prior user gesture, so this
-// tries immediately on load and, if blocked, starts on the very first
-// interaction anywhere on the page instead. The mute button just toggles
-// `.muted` independently of whether playback has actually started yet.
-(function initMusic() {
-  const audio = document.getElementById('bg-music');
-  const muteBtn = document.getElementById('mute-btn');
-  if (!audio || !muteBtn) return;
+// ── Gallery: drag-to-scroll + wheel-to-horizontal (desktop only) ──
+// Mobile stacks the images vertically via CSS alone, no JS needed there.
+(function initGallery() {
+  const track = document.querySelector('.gallery-track');
+  if (!track) return;
 
-  audio.volume = 0.5;
-  let nudgeTimer;
+  const MQ = window.matchMedia('(min-width: 750px)');
+  const DRAG_THRESHOLD = 6; // px, before a pointerdown counts as a drag not a click
 
-  function updateButton() {
-    const muted = audio.muted;
-    muteBtn.setAttribute('aria-pressed', muted ? 'true' : 'false');
-    muteBtn.setAttribute('aria-label', muted ? 'Unmute background music' : 'Mute background music');
-  }
+  let isDown = false;
+  let moved = false;
+  let startX = 0;
+  let startScrollLeft = 0;
 
-  function stopNudge() {
-    clearTimeout(nudgeTimer);
-    muteBtn.classList.remove('is-nudging');
-  }
-
-  // Only worth inviting the gesture if autoplay actually got blocked —
-  // give the initial play() a moment to resolve/reject before deciding.
-  function scheduleNudge() {
-    nudgeTimer = setTimeout(() => {
-      if (audio.paused) muteBtn.classList.add('is-nudging');
-    }, 1200);
-  }
-
-  function tryPlay(isInitial) {
-    audio.play().then(stopNudge).catch(() => {
-      if (isInitial) scheduleNudge();
-      const startOnGesture = () => audio.play().then(stopNudge).catch(() => {});
-      document.addEventListener('pointerdown', startOnGesture, { once: true });
-      document.addEventListener('keydown', startOnGesture, { once: true });
-    });
-  }
-
-  tryPlay(true);
-  updateButton();
-
-  muteBtn.addEventListener('click', () => {
-    stopNudge(); // clicking the control at all means the nudge did its job
-    audio.muted = !audio.muted;
-    updateButton();
-    if (audio.paused) tryPlay(false);
+  track.addEventListener('pointerdown', e => {
+    if (!MQ.matches || (e.pointerType === 'mouse' && e.button !== 0)) return;
+    isDown = true;
+    moved = false;
+    startX = e.clientX;
+    startScrollLeft = track.scrollLeft;
+    track.classList.add('is-dragging');
   });
+
+  track.addEventListener('pointermove', e => {
+    if (!MQ.matches || !isDown) return;
+    const dx = e.clientX - startX;
+    if (!moved && Math.abs(dx) > DRAG_THRESHOLD) moved = true;
+    if (moved) {
+      e.preventDefault();
+      track.scrollLeft = startScrollLeft - dx;
+    }
+  });
+
+  function endDrag() {
+    if (!isDown) return;
+    isDown = false;
+    track.classList.remove('is-dragging');
+    track.dataset.drag = moved ? '1' : '0';
+    setTimeout(() => { track.dataset.drag = '0'; }, 100);
+  }
+  track.addEventListener('pointerup', endDrag);
+  track.addEventListener('pointercancel', endDrag);
+
+  // Wheel/trackpad vertical motion becomes horizontal scroll on desktop.
+  track.addEventListener('wheel', e => {
+    if (!MQ.matches) return;
+    const max = track.scrollWidth - track.clientWidth;
+    if (max <= 0) return;
+
+    const raw = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+    if (!raw) return;
+
+    const prev = track.scrollLeft;
+    const atStart = prev <= 1;
+    const atEnd = prev >= max - 1;
+    if ((raw < 0 && atStart) || (raw > 0 && atEnd)) return; // let the page scroll at the edges
+
+    e.preventDefault();
+    track.scrollLeft = Math.max(0, Math.min(max, prev + raw * 0.35));
+  }, { passive: false });
 })();
 
 // ── Cart (stub — no live storefront yet) ──────────────────
