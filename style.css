@@ -261,10 +261,8 @@ img { max-width: 100%; }
 
 /* ── Footer ── */
 .site-footer {
-  display: flex;
-  font-size: 11px;
-  justify-content: space-between;
-  padding: 20px 24px 24px;
+  border-top: 1px solid rgba(26, 20, 16, .15);
+  padding: 48px 24px 28px;
 }
 .site-footer a {
   color: var(--color-black);
@@ -272,6 +270,102 @@ img { max-width: 100%; }
   text-underline-offset: 3px;
 }
 .site-footer a:hover { color: var(--color-accent); }
+
+/* Newsletter — same "get X% off" incentive pattern as the reference,
+   own copy/copy target. No image block: none was supplied, and this
+   stays text-only rather than guess at one. */
+.newsletter-form {
+  margin: 0 auto 48px;
+  max-width: 440px;
+  text-align: center;
+}
+.newsletter-title {
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 0 0 16px;
+}
+.newsletter-inputs {
+  display: flex;
+}
+.newsletter-inputs input {
+  background-color: var(--color-white);
+  border: 1px solid rgba(26, 20, 16, .3);
+  border-right: none;
+  color: var(--color-black);
+  flex: 1;
+  font-size: 13px;
+  min-width: 0;
+  padding: 12px 14px;
+}
+.newsletter-inputs input::placeholder { color: #999; }
+.newsletter-inputs input:focus { outline: 1px solid var(--color-black); outline-offset: -1px; }
+.newsletter-inputs button {
+  background: var(--color-black);
+  border: 1px solid var(--color-black);
+  color: var(--color-white);
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: .08em;
+  padding: 12px 18px;
+  text-transform: uppercase;
+  transition: background-color .15s, color .15s;
+}
+.newsletter-inputs button:hover,
+.newsletter-inputs button:focus-visible {
+  background: var(--color-white);
+  color: var(--color-black);
+}
+.newsletter-status {
+  font-size: 12px;
+  height: 1.2em;
+  margin: 10px 0 0;
+}
+
+/* Three-column layout: placeholder links (left) / wordmark + copyright
+   (center) / social (right) — left-aligned links per direction, rather
+   than the reference's centered-under-logo treatment. */
+.footer-columns {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+.footer-col { display: flex; }
+.footer-col-left {
+  flex: 1;
+  gap: 16px;
+}
+.footer-col-left a { font-size: 11px; }
+.footer-col-center {
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  gap: 6px;
+  text-align: center;
+}
+.footer-wordmark { font-size: 14px; letter-spacing: .04em; }
+.footer-copyright { font-size: 11px; margin: 0; opacity: .7; }
+.footer-col-right {
+  flex: 1;
+  justify-content: flex-end;
+}
+.footer-col-right a { font-size: 11px; }
+
+@media screen and (max-width: 700px) {
+  .footer-columns {
+    flex-direction: column;
+    gap: 24px;
+  }
+  .footer-col-left {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+    order: 2;
+  }
+  .footer-col-center { order: 1; }
+  .footer-col-right { order: 3; }
+}
 
 /* ── Toast (cart click feedback) ── */
 .toast {

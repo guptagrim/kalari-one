@@ -77,12 +77,15 @@
   });
 })();
 
-// ── Notify form ───────────────────────────────────────────
-(function initForm() {
-  const form = document.getElementById('notify-form');
+// ── Email signup forms (main "Notify me" + footer newsletter) ──────
+// Both forms are stubs pointing at the same TODO — wire up a real
+// endpoint (Klaviyo, Mailchimp, your own API, whatever) in one place
+// once you have one, rather than two separate integrations.
+function bindSignupForm(formId, statusId, successMessage) {
+  const form = document.getElementById(formId);
   if (!form) return;
 
-  const status = document.getElementById('notify-status');
+  const status = document.getElementById(statusId);
   const input = form.querySelector('input[type="email"]');
   const button = form.querySelector('button');
 
@@ -97,11 +100,13 @@
     // TODO: replace with your actual signup endpoint
     await new Promise(resolve => setTimeout(resolve, 600));
 
-    status.textContent = "You're on the list.";
+    status.textContent = successMessage;
     input.value = '';
     button.disabled = false;
   });
-})();
+}
+bindSignupForm('notify-form', 'notify-status', "You're on the list.");
+bindSignupForm('newsletter-form', 'newsletter-status', "You're in — check your inbox for your code.");
 
 // ── Footer year ───────────────────────────────────────────
 (function initYear() {

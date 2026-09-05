@@ -67,8 +67,34 @@
   </section>
 
   <footer class="site-footer">
-    <span>&copy; <span id="year"></span> Kalari Studio</span>
-    <a href="#" target="_blank" rel="noopener">Instagram</a>
+
+    <form id="newsletter-form" class="newsletter-form">
+      <label for="newsletter-email" class="visually-hidden">Email address</label>
+      <p class="newsletter-title">Get 10% off your first order. Sign up for email updates, early access, and news on new collections.</p>
+      <div class="newsletter-inputs">
+        <input id="newsletter-email" type="email" name="email" placeholder="Email" required>
+        <button type="submit">Submit</button>
+      </div>
+      <p id="newsletter-status" class="newsletter-status" role="status" aria-live="polite"></p>
+    </form>
+
+    <div class="footer-columns">
+      <div class="footer-col footer-col-left">
+        <!-- Placeholder links — no real pages yet -->
+        <a href="#">Sizing</a>
+        <a href="#">Returns &amp; Exchanges</a>
+        <a href="#">Shipping</a>
+        <a href="#">FAQ</a>
+      </div>
+      <div class="footer-col footer-col-center">
+        <span class="footer-wordmark">Kalari Studio</span>
+        <p class="footer-copyright">&copy; <span id="year"></span> Kalari Studio. All rights reserved.</p>
+      </div>
+      <div class="footer-col footer-col-right">
+        <a href="https://www.instagram.com/kalari_studio" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+
   </footer>
 
 </div>
