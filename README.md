@@ -46,8 +46,36 @@ Current direction:
   are sentence case at a normal reading size rather than tiny
   tracked-out uppercase — both changes from an earlier pass that read
   as too harsh against a serif typeface.
-- **Header:** wordmark + a single flat cart icon button. No background
-  music, so no mute control either.
+- **Header:** logo mark + wordmark (`.brand`) + a single flat cart icon
+  button. No background music, so no mute control either.
+
+## The logo mark
+
+`.logo-mark` in `index.html` is a placeholder — a GIF linked directly
+from an external URL (`https://thrly.github.io/img/warping_circle.gif`)
+rather than committed into `public/img/`, per direction. Two
+consequences of that:
+
+- The header depends on that external host staying up. If it goes
+  down, the `<img>` just fails quietly (no `width`/`height` attribute
+  is set, since the GIF's real dimensions couldn't be confirmed from
+  this environment — see below — so there's nothing to reserve layout
+  space with) and the header falls back to showing the wordmark alone,
+  rather than a broken-image icon. That's a reasonable degrade for a
+  placeholder, but worth knowing before launch.
+- I was never able to actually see this GIF render — this environment's
+  network egress policy blocks essentially all external domains
+  (confirmed it's a blanket policy, not specific to this URL: even
+  google.com gets rejected the same way), so I could neither fetch its
+  dimensions nor visually confirm it looks right. `.logo-mark` is
+  styled `height: 32px; width: auto` to preserve whatever its real
+  aspect ratio turns out to be rather than risk distorting it with a
+  guessed fixed size — check that it actually looks right once you
+  open the page yourself.
+
+When a final logo is ready, swap the `src` for a local file in
+`public/img/` and commit it — that removes the external dependency
+entirely.
 
 ## The gallery
 

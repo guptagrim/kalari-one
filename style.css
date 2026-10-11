@@ -80,6 +80,16 @@ img { max-width: 100%; }
   font-weight: var(--font-weight-regular);
   letter-spacing: .06em;
 }
+.brand {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+}
+.logo-mark {
+  display: block;
+  height: 32px;
+  width: auto; /* don't assume the external GIF's aspect ratio — preserve whatever it actually is */
+}
 
 /* ── Header toolbar: flat icon button, no fill/shadow/blur ── */
 .toolbar {
