@@ -80,6 +80,16 @@ img { max-width: 100%; }
   font-weight: var(--font-weight-regular);
   letter-spacing: .06em;
 }
+.brand {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+}
+.logo-mark {
+  display: block;
+  height: 32px;
+  width: auto; /* don't assume the external GIF's aspect ratio — preserve whatever it actually is */
+}
 
 /* ── Header toolbar: flat icon button, no fill/shadow/blur ── */
 .toolbar {
@@ -202,6 +212,13 @@ img { max-width: 100%; }
   font-style: italic;
   margin: 14px 0 0;
   max-width: 32ch;
+}
+.mission {
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 16px 0 0;
+  max-width: 42ch;
+  opacity: .8;
 }
 .launch-date {
   font-size: 11px;
