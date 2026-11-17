@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" preserveAspectRatio="none">
+  <!-- Temporary stand-in until final photography is ready. -->
+  <rect width="400" height="400" fill="#E9DFD0"/>
+  <path d="M0 0L400 400M400 0L0 400" stroke="#1A1410" stroke-opacity=".12" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+</svg>

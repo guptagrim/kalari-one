@@ -4,99 +4,101 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Kalari Studio — Coming Soon</title>
-  <meta name="description" content="Kalari Studio is launching soon.">
+  <meta name="description" content="Natural fabrics for movement practices. Kalari Studio is coming soon.">
   <meta name="author" content="Kalari Studio">
   <meta property="og:title" content="Kalari Studio — Coming Soon">
-  <meta property="og:description" content="Kalari Studio is launching soon.">
+  <meta property="og:description" content="Natural fabrics for movement practices. Kalari Studio is coming soon.">
   <meta property="og:type" content="website">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+<!-- Layout follows the Balsamiq board "Your First Project / New board 1".
+     The textured backdrop is a fixed layer (see .backdrop in style.css):
+     content scrolls over it while it stays put. -->
+<div class="backdrop" aria-hidden="true"></div>
+
 <div class="page">
 
+  <!-- Header stays pinned while the page scrolls. -->
   <header class="site-header">
     <div class="brand">
-      <!-- Placeholder logo mark, linked directly (not committed to the
-           repo) per direction — hosted externally, so it depends on
-           that URL staying up. Swap for a local file in public/img/
-           whenever a final mark is ready. -->
+      <span class="wordmark">KALARI <span class="wordmark-sub">studio</span></span>
+      <!-- Placeholder logo mark, hosted externally (not in the repo).
+           Swap for a local file in public/img/ once the final mark is ready. -->
       <img class="logo-mark" src="https://thrly.github.io/img/warping_circle.gif" alt="">
-      <span class="wordmark">Kalari Studio</span>
-    </div>
-
-    <div class="toolbar">
-      <button type="button" id="cart-btn" class="icon-btn" aria-label="View cart">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="9" cy="21" r="1"/>
-          <circle cx="19" cy="21" r="1"/>
-          <path d="M2.5 3h2l2.4 12.2a2 2 0 0 0 2 1.8h7.7a2 2 0 0 0 2-1.6L21 8H6.2"/>
-        </svg>
-        <span class="cart-count" id="cart-count" hidden>0</span>
-      </button>
     </div>
   </header>
 
-  <!-- ── GALLERY: pure images. Desktop: full-height, drag/wheel horizontal
-       scroll. Mobile: stacks vertically, full width. See initGallery in
-       main.js. ── -->
-  <section class="gallery" aria-label="Kalari Studio">
-    <div class="gallery-track" data-drag="0">
-      <div class="gallery-item">
-        <img src="public/img/gallery-1.jpg" alt="" draggable="false">
+  <main>
+    <!-- ── HERO: three staggered photos of Fanny, then tagline + waitlist ── -->
+    <section class="hero">
+      <div class="collage">
+        <!-- Placeholder images: replace src with the final photos of Fanny. -->
+        <figure class="collage-item collage-item--a">
+          <img src="public/img/placeholder.svg" alt="">
+        </figure>
+        <figure class="collage-item collage-item--b">
+          <img src="public/img/placeholder.svg" alt="">
+        </figure>
+        <figure class="collage-item collage-item--c">
+          <img src="public/img/placeholder.svg" alt="">
+        </figure>
       </div>
-      <div class="gallery-item">
-        <img src="public/img/gallery-2.jpg" alt="" draggable="false">
+
+      <div class="signup">
+        <h1 class="tagline">Natural fabrics for movement practices</h1>
+        <!-- Alternate copy from the wireframe notes: "Launching spring 2027." -->
+        <p class="signup-lead">Coming soon. Be the first to know:</p>
+
+        <form id="notify-form" class="notify-form">
+          <label for="notify-email" class="visually-hidden">Email address</label>
+          <input id="notify-email" type="email" name="email" placeholder="Your email address" autocomplete="email" required>
+          <button type="submit">Waitlist</button>
+        </form>
+        <p id="notify-status" class="notify-status" role="status" aria-live="polite"></p>
       </div>
-      <div class="gallery-item">
-        <img src="public/img/gallery-3.jpg" alt="" draggable="false">
+    </section>
+
+    <!-- ── ABOUT: copy on the left, Indian motifs on the right. Roomy on
+         purpose; the page can scroll. ── -->
+    <section class="about">
+      <!-- Rotating lines: the prefix stays put, the phrase after it cycles
+           through data-phrases (see initRotators in main.js). The two lines
+           run on a 2:3 rhythm with a phase offset, so their swaps rarely
+           land at the same moment. Without JS the first phrase shows. -->
+      <div class="about-copy">
+        <p class="rotator"
+           data-interval="2800" data-offset="0" data-color-start="0"
+           data-phrases='["movement practitioners.", "yogis and yoginis.", "breathing on the dancefloor.", "wayfarers.", "bikers and skateboarders."]'>
+          <span class="visually-hidden">Made for movement practitioners, yogis and yoginis, breathing on the dancefloor, wayfarers, bikers and skateboarders.</span>
+          <span class="rotator-line" aria-hidden="true">Made for <span class="rotator-phrase">movement practitioners.</span></span>
+        </p>
+        <p class="rotator"
+           data-interval="4200" data-offset="700" data-color-start="2"
+           data-phrases='["Indian silhouettes and craftsmanship.", "Brooklyn dancefloors and bike lanes.", "Kalarippayattu – one of the world’s oldest martial arts.", "softness, comfort, and nature."]'>
+          <span class="visually-hidden">Inspired by Indian silhouettes and craftsmanship; Brooklyn dancefloors and bike lanes; Kalarippayattu, one of the world’s oldest martial arts; and softness, comfort, and nature.</span>
+          <span class="rotator-line" aria-hidden="true">Inspired by <span class="rotator-phrase">Indian silhouettes and craftsmanship.</span></span>
+        </p>
       </div>
-    </div>
-  </section>
-
-  <!-- ── SIGNUP: all the page's copy lives here, not over the gallery ── -->
-  <section class="signup">
-    <p class="eyebrow">Launch: Spring 2027</p>
-    <h1 class="headline">Kalari Studio</h1>
-    <p class="tagline">Natural Fabrics for Movement Practices.</p>
-    <p class="mission">We are designing clothes that flow with you — influenced by Indian silhouettes + craftsmanship.</p>
-
-    <p class="launch-date">Sign up to know when we drop:</p>
-
-    <form id="notify-form" class="notify-form">
-      <label for="notify-email" class="visually-hidden">Email address</label>
-      <input id="notify-email" type="email" name="email" placeholder="Your email address" required>
-      <button type="submit">
-        <span class="btn-label">Sign up</span>
-      </button>
-    </form>
-    <p id="notify-status" class="notify-status" role="status" aria-live="polite"></p>
-  </section>
+      <div class="motifs">
+        <!-- Placeholder images: replace with Indian motifs
+             (dancing painting / lotus art). -->
+        <figure class="motif motif--a">
+          <img src="public/img/placeholder.svg" alt="">
+        </figure>
+        <figure class="motif motif--b">
+          <img src="public/img/placeholder.svg" alt="">
+        </figure>
+      </div>
+    </section>
+  </main>
 
   <footer class="site-footer">
-
-    <div class="footer-columns">
-      <div class="footer-col footer-col-left">
-        <!-- Placeholder links — no real pages yet -->
-        <a href="#">Sizing</a>
-        <a href="#">Returns &amp; Exchanges</a>
-        <a href="#">Shipping</a>
-        <a href="#">FAQ</a>
-      </div>
-      <div class="footer-col footer-col-center">
-        <span class="footer-wordmark">Kalari Studio</span>
-        <p class="footer-copyright">&copy; <span id="year"></span> Kalari Studio. All rights reserved.</p>
-      </div>
-      <div class="footer-col footer-col-right">
-        <a href="https://www.instagram.com/kalari_studio" target="_blank" rel="noopener">Instagram</a>
-      </div>
-    </div>
-
+    <p class="footer-copyright">&copy; <span id="year">2026</span> Kalari Studio. All rights reserved.</p>
   </footer>
 
 </div>
-
-<p id="toast" class="toast" role="status" aria-live="polite"></p>
 
 <script src="main.js"></script>
 </body>

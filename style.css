@@ -24,6 +24,7 @@ button,input{overflow:visible}button,select{text-transform:none}
   --color-black:     #1A1410;
   --color-text:      var(--color-black);
   --color-bg:        #FFFBF4;
+  --color-rule:      rgba(26, 20, 16, .18);
 
   --font-body: 'Clarendon MT Std', Georgia, serif;
   --font-weight-regular: 400;
@@ -44,15 +45,36 @@ html {
   font-weight: var(--font-weight-regular);
   line-height: 1.3;
 }
-body, html { min-height: 100%; width: 100%; }
+body {
+  background-color: var(--color-bg);
+  min-height: 100%;
+  width: 100%;
+}
 button, input { font-family: inherit; }
-img { max-width: 100%; }
+img { display: block; max-width: 100%; }
+figure { margin: 0; }
 
 /* ── Utility ── */
 .visually-hidden {
   clip: rect(0 0 0 0); clip-path: inset(50%);
   height: 1px; overflow: hidden;
   position: absolute; white-space: nowrap; width: 1px;
+}
+
+/* ────────────────────────────────────────────
+   BACKDROP — textured layer pinned to the viewport. Content scrolls
+   over it; the texture itself never moves. A fixed element is used
+   instead of background-attachment: fixed, which iOS Safari ignores.
+   Placeholder grain for now — swap the background-image for a real
+   texture (e.g. a linen photo) when one is ready.
+──────────────────────────────────────────── */
+.backdrop {
+  background-color: var(--color-bg);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .1  0 0 0 0 .08  0 0 0 0 .06  0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  inset: 0;
+  pointer-events: none;
+  position: fixed;
+  z-index: -1;
 }
 
 /* ────────────────────────────────────────────
@@ -63,296 +85,228 @@ img { max-width: 100%; }
   flex-direction: column;
   min-height: 100dvh;
 }
+main { flex: 1; }
 
-/* ── Header ── */
+/* Full-bleed sections (so divider lines span the page) with content
+   capped at ~1072px via side padding. */
+.hero,
+.about {
+  padding-left: max(24px, calc((100% - 1072px) / 2));
+  padding-right: max(24px, calc((100% - 1072px) / 2));
+  width: 100%;
+}
+
+/* ── Header: centered wordmark + mark, pinned to the top ── */
 .site-header {
-  align-items: center;
+  background: var(--color-bg); /* solid, so the logo's multiply blend stays clean over scrolled content */
+  border-bottom: 1px solid var(--color-rule);
   display: flex;
-  justify-content: space-between;
-  padding: 20px 24px;
+  justify-content: center;
+  padding: 22px 24px;
   position: sticky;
   top: 0;
-  background: var(--color-bg);
   z-index: 10;
-}
-.wordmark {
-  font-size: 20px;
-  font-weight: var(--font-weight-regular);
-  letter-spacing: .06em;
 }
 .brand {
   align-items: center;
   display: flex;
   gap: 10px;
 }
+.wordmark {
+  font-size: 22px;
+  letter-spacing: .08em;
+}
+.wordmark-sub {
+  letter-spacing: .02em;
+  text-transform: lowercase;
+}
 .logo-mark {
-  display: block;
-  height: 32px;
-  width: auto; /* don't assume the external GIF's aspect ratio — preserve whatever it actually is */
-}
-
-/* ── Header toolbar: flat icon button, no fill/shadow/blur ── */
-.toolbar {
-  align-items: center;
-  display: flex;
-  gap: 10px;
-}
-.icon-btn {
-  align-items: center;
-  background: none;
-  border: none;
-  border-radius: 50%;
-  color: var(--color-black);
-  cursor: pointer;
-  display: flex;
-  height: 38px;
-  justify-content: center;
-  opacity: .8;
-  padding: 0;
-  position: relative;
-  transition: opacity .15s, background-color .15s;
-  width: 38px;
-}
-.icon-btn:hover,
-.icon-btn:focus-visible {
-  background-color: rgba(26, 20, 16, .06);
-  opacity: 1;
-}
-.icon-btn:focus-visible { outline: 1px solid var(--color-black); outline-offset: 2px; }
-.icon-btn .icon { height: 20px; width: 20px; }
-.cart-count[hidden] { display: none; }
-.cart-count {
-  align-items: center;
-  background: var(--color-accent);
-  border-radius: 50%;
-  color: var(--color-white);
-  display: flex;
-  font-size: 9px;
-  height: 15px;
-  justify-content: center;
-  min-width: 15px;
-  padding: 0 3px;
-  position: absolute;
-  right: -5px;
-  top: -3px;
+  height: 30px;
+  mix-blend-mode: multiply; /* the GIF has a white background; let the cream show through */
+  width: auto; /* keep the external GIF's own aspect ratio */
 }
 
 /* ────────────────────────────────────────────
-   GALLERY — pure images, no overlay text.
-   Desktop: full-height strip, drag/wheel horizontal scroll.
-   Mobile: stacks vertically, full width. See initGallery in main.js.
+   HERO — three staggered photos (left large, middle large and dropped,
+   right smaller), then the tagline and waitlist form.
 ──────────────────────────────────────────── */
-.gallery {
-  width: 100%;
+.hero {
+  padding-bottom: 96px;
+  padding-top: 48px;
 }
-.gallery-track {
-  display: flex;
-  flex-direction: column;
+.collage {
+  align-items: start;
+  display: grid;
+  gap: clamp(12px, 4vw, 56px);
+  grid-template-columns: 246fr 246fr 185fr; /* proportions from the wireframe */
 }
-.gallery-item {
-  width: 100%;
-}
-.gallery-item img {
-  display: block;
+.collage-item img {
   height: auto;
+  object-fit: cover;
   width: 100%;
 }
-@media screen and (min-width: 750px) {
-  .gallery-track {
-    cursor: grab;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    height: calc(100dvh - 73px); /* viewport minus header */
-    overflow-x: auto;
-    overflow-y: hidden;
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
-  }
-  .gallery-track::-webkit-scrollbar { display: none; }
-  .gallery-track.is-dragging { cursor: grabbing; user-select: none; }
-  .gallery-item {
-    flex: 0 0 auto;
-    height: 100%;
-    width: auto;
-  }
-  .gallery-item img {
-    height: 100%;
-    width: auto;
-  }
-}
+.collage-item--a img { aspect-ratio: 246 / 240; }
+.collage-item--b { margin-top: 12%; }
+.collage-item--b img { aspect-ratio: 246 / 240; }
+.collage-item--c img { aspect-ratio: 185 / 168; }
 
-/* ────────────────────────────────────────────
-   SIGNUP — all page copy lives here, separate from the pure-image
-   gallery above.
-──────────────────────────────────────────── */
 .signup {
   align-items: center;
   display: flex;
   flex-direction: column;
-  padding: 64px 24px;
+  margin-top: clamp(48px, 8vw, 80px);
   text-align: center;
 }
-.eyebrow {
-  color: var(--color-accent);
-  font-size: 12px;
-  font-weight: var(--font-weight-bold);
-  letter-spacing: .16em;
-  margin: 0 0 12px;
-  text-transform: uppercase;
-}
-.headline {
-  font-size: clamp(34px, 7vw, 62px);
+.tagline {
+  font-size: clamp(22px, 3vw, 30px);
   font-weight: var(--font-weight-regular);
   letter-spacing: .01em;
-  line-height: 1.1;
+  line-height: 1.2;
   margin: 0;
 }
-.tagline {
-  font-size: clamp(14px, 1.6vw, 16px);
-  font-style: italic;
-  margin: 14px 0 0;
-  max-width: 32ch;
-}
-.mission {
-  font-size: 14px;
-  line-height: 1.6;
-  margin: 16px 0 0;
-  max-width: 42ch;
-  opacity: .8;
-}
-.launch-date {
-  font-size: 11px;
-  font-weight: var(--font-weight-bold);
-  letter-spacing: .1em;
-  margin: 26px 0 0;
-  text-transform: uppercase;
+.signup-lead {
+  font-size: 15px;
+  margin: 18px 0 0;
+  opacity: .85;
 }
 
-/* ── Notify form — sharp corners, flat. Typography-led buttons rather
-   than the previous tiny-uppercase treatment: sentence case at a
-   readable size reads calmer against a serif typeface, and the hover
-   is a soft charcoal shift instead of a full white/black invert. ── */
+/* ── Waitlist form: input + button side by side ── */
 .notify-form {
   display: flex;
-  gap: 0;
-  margin: 24px 0 0;
+  gap: 12px;
+  margin: 22px 0 0;
+  max-width: 440px;
   width: 100%;
-  max-width: 420px;
 }
 .notify-form input {
   background-color: var(--color-white);
-  border: 1px solid rgba(26, 20, 16, .3);
-  border-right: none;
+  border: 1px solid rgba(26, 20, 16, .35);
   color: var(--color-black);
   flex: 1;
   font-size: 15px;
   min-width: 0;
-  padding: 14px 18px;
+  padding: 12px 16px;
 }
 .notify-form input::placeholder { color: #999; }
 .notify-form input:focus { outline: 1px solid var(--color-black); outline-offset: -1px; }
 .notify-form button {
   background: var(--color-black);
   border: 1px solid var(--color-black);
+  border-radius: 999px;
   color: var(--color-white);
   cursor: pointer;
-  font-size: 15px;
-  letter-spacing: .02em;
-  padding: 14px 26px;
+  font-size: 13px;
+  letter-spacing: .14em;
+  padding: 12px 26px;
+  text-transform: uppercase;
   transition: background-color .2s ease;
   white-space: nowrap;
 }
 .notify-form button:hover,
-.notify-form button:focus-visible {
-  background: #38302A;
-}
+.notify-form button:focus-visible { background: #38302A; }
+.notify-form button:focus-visible { outline: 1px solid var(--color-black); outline-offset: 2px; }
 .notify-form button[disabled] { cursor: default; opacity: .6; }
 
-@media screen and (max-width: 480px) {
-  .notify-form { flex-direction: column; }
-  .notify-form input { border-right: 1px solid rgba(26, 20, 16, .3); border-bottom: none; }
-  .notify-form button { border-top: none; }
-}
-
 .notify-status {
-  font-size: 12px;
-  height: 1.2em;
+  font-size: 13px;
   margin: 12px 0 0;
+  min-height: 1.2em;
 }
 
-/* ── Footer ── */
+/* ────────────────────────────────────────────
+   ABOUT — copy left, two staggered Indian-motif images right.
+   Generous spacing on purpose; the page can scroll.
+──────────────────────────────────────────── */
+.about {
+  align-items: center;
+  border-top: 1px solid var(--color-rule);
+  display: grid;
+  gap: 48px;
+  grid-template-columns: 1fr 1fr;
+  padding-bottom: clamp(80px, 12vw, 160px);
+  padding-top: clamp(80px, 12vw, 160px);
+}
+.about-copy p {
+  font-size: clamp(20px, 2.4vw, 26px);
+  line-height: 1.35;
+  margin: 0;
+  max-width: 22ch;
+}
+.about-copy p + p { margin-top: 1.2em; }
+
+/* ── Rotating phrases ──
+   Every phrase is also rendered as an invisible "ghost" in the same grid
+   cell, so the paragraph is always as tall as its longest phrase and
+   nothing below it jumps when the text changes. */
+.about-copy .rotator {
+  display: grid;
+  max-width: 24ch;
+}
+.rotator-line,
+.rotator-ghost { grid-area: 1 / 1; }
+.rotator-ghost { visibility: hidden; }
+
+.rotator-phrase { transition: color .3s ease; }
+.rotator-phrase .w { display: inline-block; white-space: nowrap; } /* keep words whole when wrapping */
+.rotator-phrase .ch { display: inline-block; }
+
+/* In: letters rise in one after another with a little tilt and overshoot. */
+.rotator-phrase.is-in .ch {
+  animation: ch-in .5s cubic-bezier(.2, .8, .3, 1.25) both;
+  animation-delay: calc(var(--i) * var(--step, 18ms));
+}
+/* Out: letters drift up, blur and fade, in a quicker ripple. */
+.rotator-phrase.is-out .ch {
+  animation: ch-out .26s ease-in forwards;
+  animation-delay: calc(var(--i) * 5ms);
+}
+@keyframes ch-in {
+  from { filter: blur(3px); opacity: 0; transform: translateY(.5em) rotate(8deg); }
+}
+@keyframes ch-out {
+  to { filter: blur(4px); opacity: 0; transform: translateY(-.35em) rotate(-4deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rotator-phrase.is-in .ch,
+  .rotator-phrase.is-out .ch { animation: none; }
+}
+
+.motifs {
+  align-items: start;
+  display: grid;
+  gap: clamp(16px, 4vw, 48px);
+  grid-template-columns: 1fr 1fr;
+}
+.motif img {
+  aspect-ratio: 77 / 79;
+  object-fit: cover;
+  width: 100%;
+}
+.motif--b { margin-top: 36%; }
+
+/* ── Footer: copyright only ── */
 .site-footer {
-  border-top: 1px solid rgba(26, 20, 16, .15);
-  padding: 48px 24px 28px;
-}
-.site-footer a {
-  color: var(--color-black);
-  text-decoration: none;
-}
-.site-footer a:hover { color: var(--color-accent); }
-
-/* Three-column layout: placeholder links (left) / wordmark + copyright
-   (center) / social (right) — left-aligned links per direction, rather
-   than the reference's centered-under-logo treatment. */
-.footer-columns {
-  align-items: center;
-  display: flex;
-  justify-content: space-between;
-}
-.footer-col { display: flex; }
-.footer-col-left {
-  flex: 1;
-  gap: 16px;
-}
-.footer-col-left a { font-size: 11px; }
-.footer-col-center {
-  flex-direction: column;
-  align-items: center;
-  flex: 1;
-  gap: 6px;
+  border-top: 1px solid var(--color-rule);
+  padding: 40px 24px;
   text-align: center;
 }
-.footer-wordmark { font-size: 14px; letter-spacing: .04em; }
-.footer-copyright { font-size: 11px; margin: 0; opacity: .7; }
-.footer-col-right {
-  flex: 1;
-  justify-content: flex-end;
-}
-.footer-col-right a { font-size: 11px; }
-
-@media screen and (max-width: 700px) {
-  .footer-columns {
-    flex-direction: column;
-    gap: 24px;
-  }
-  .footer-col-left {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 10px;
-    order: 2;
-  }
-  .footer-col-center { order: 1; }
-  .footer-col-right { order: 3; }
-}
-
-/* ── Toast (cart click feedback) ── */
-.toast {
-  background: var(--color-black);
-  bottom: 28px;
-  color: var(--color-white);
-  font-size: 12px;
-  left: 50%;
+.footer-copyright {
+  font-size: 13px;
   margin: 0;
-  opacity: 0;
-  padding: 10px 20px;
-  pointer-events: none;
-  position: fixed;
-  transform: translate(-50%, 8px);
-  transition: opacity .25s ease, transform .25s ease;
-  z-index: 100;
 }
-.toast.is-visible {
-  opacity: 1;
-  transform: translate(-50%, 0);
+
+/* ── Small screens ── */
+@media screen and (max-width: 700px) {
+  .site-header { padding: 16px; }
+  .wordmark { font-size: 19px; }
+  .hero, .about { padding-left: 16px; padding-right: 16px; }
+  .hero { padding-top: 28px; padding-bottom: 72px; }
+  .about {
+    gap: 40px;
+    grid-template-columns: 1fr;
+  }
+}
+@media screen and (max-width: 480px) {
+  .notify-form { flex-direction: column; }
+  .notify-form button { padding: 14px 26px; }
 }

@@ -1,86 +1,8 @@
 /* Kalari Studio — main.js */
 
-// ── Gallery: drag-to-scroll + wheel-to-horizontal (desktop only) ──
-// Mobile stacks the images vertically via CSS alone, no JS needed there.
-(function initGallery() {
-  const track = document.querySelector('.gallery-track');
-  if (!track) return;
-
-  const MQ = window.matchMedia('(min-width: 750px)');
-  const DRAG_THRESHOLD = 6; // px, before a pointerdown counts as a drag not a click
-
-  let isDown = false;
-  let moved = false;
-  let startX = 0;
-  let startScrollLeft = 0;
-
-  track.addEventListener('pointerdown', e => {
-    if (!MQ.matches || (e.pointerType === 'mouse' && e.button !== 0)) return;
-    isDown = true;
-    moved = false;
-    startX = e.clientX;
-    startScrollLeft = track.scrollLeft;
-    track.classList.add('is-dragging');
-  });
-
-  track.addEventListener('pointermove', e => {
-    if (!MQ.matches || !isDown) return;
-    const dx = e.clientX - startX;
-    if (!moved && Math.abs(dx) > DRAG_THRESHOLD) moved = true;
-    if (moved) {
-      e.preventDefault();
-      track.scrollLeft = startScrollLeft - dx;
-    }
-  });
-
-  function endDrag() {
-    if (!isDown) return;
-    isDown = false;
-    track.classList.remove('is-dragging');
-    track.dataset.drag = moved ? '1' : '0';
-    setTimeout(() => { track.dataset.drag = '0'; }, 100);
-  }
-  track.addEventListener('pointerup', endDrag);
-  track.addEventListener('pointercancel', endDrag);
-
-  // Wheel/trackpad vertical motion becomes horizontal scroll on desktop.
-  track.addEventListener('wheel', e => {
-    if (!MQ.matches) return;
-    const max = track.scrollWidth - track.clientWidth;
-    if (max <= 0) return;
-
-    const raw = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
-    if (!raw) return;
-
-    const prev = track.scrollLeft;
-    const atStart = prev <= 1;
-    const atEnd = prev >= max - 1;
-    if ((raw < 0 && atStart) || (raw > 0 && atEnd)) return; // let the page scroll at the edges
-
-    e.preventDefault();
-    track.scrollLeft = Math.max(0, Math.min(max, prev + raw * 0.35));
-  }, { passive: false });
-})();
-
-// ── Cart (stub — no live storefront yet) ──────────────────
-(function initCart() {
-  const btn = document.getElementById('cart-btn');
-  const toast = document.getElementById('toast');
-  if (!btn || !toast) return;
-
-  let hideTimer;
-  btn.addEventListener('click', () => {
-    toast.textContent = 'Cart opens at launch — Sept 14, 2026.';
-    toast.classList.add('is-visible');
-    clearTimeout(hideTimer);
-    hideTimer = setTimeout(() => toast.classList.remove('is-visible'), 2600);
-  });
-})();
-
-// ── Email signup forms (main "Notify me" + footer newsletter) ──────
-// Both forms are stubs pointing at the same TODO — wire up a real
-// endpoint (Klaviyo, Mailchimp, your own API, whatever) in one place
-// once you have one, rather than two separate integrations.
+// ── Waitlist signup form ──────────────────────────────────
+// Stub — wire up a real endpoint (Klaviyo, Mailchimp, your own API)
+// at the TODO below once you have one.
 function bindSignupForm(formId, statusId, successMessage) {
   const form = document.getElementById(formId);
   if (!form) return;
@@ -105,7 +27,112 @@ function bindSignupForm(formId, statusId, successMessage) {
     button.disabled = false;
   });
 }
-bindSignupForm('notify-form', 'notify-status', "You're in — check your inbox for your code.");
+bindSignupForm('notify-form', 'notify-status', "You're on the waitlist — we'll be in touch.");
+
+// ── Rotating phrases ("Made for …" / "Inspired by …") ─────
+// Each .rotator cycles its data-phrases every data-interval ms, starting
+// data-offset ms late. With 2800 / 4200 (a 2:3 rhythm) and a 700 ms
+// offset, the two lines never swap at the exact same instant, though
+// their animations may overlap now and then. Each phrase gets the next
+// colour from PHRASE_COLORS (data-color-start picks where a line begins);
+// the prefix keeps the body colour.
+const PHRASE_COLORS = [
+  '#B4461A', // terracotta
+  '#3F7350', // aloe green
+  '#3B4FA0', // indigo
+  '#A3336A', // magenta
+  '#8A6200', // turmeric
+]; // all ≥ 5:1 contrast on the cream background
+
+(function initRotators() {
+  const OUT_MS = 300; // ch-out duration + ripple, see style.css
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  // Split a phrase into word spans (so lines wrap between words) holding
+  // one span per letter, each with its index for the staggered animation.
+  function renderPhrase(el, text) {
+    el.textContent = '';
+    let i = 0;
+    text.split(' ').forEach((word, w) => {
+      if (w) el.append(' ');
+      const wordEl = document.createElement('span');
+      wordEl.className = 'w';
+      for (const char of word) {
+        const ch = document.createElement('span');
+        ch.className = 'ch';
+        ch.textContent = char;
+        ch.style.setProperty('--i', i++);
+        wordEl.append(ch);
+      }
+      el.append(wordEl);
+    });
+    // Keep the whole ripple around 400 ms, however long the phrase is.
+    el.style.setProperty('--step', Math.min(18, 400 / Math.max(i, 1)) + 'ms');
+  }
+
+  document.querySelectorAll('.rotator').forEach(rotator => {
+    const line = rotator.querySelector('.rotator-line');
+    const phraseEl = rotator.querySelector('.rotator-phrase');
+    let phrases;
+    try { phrases = JSON.parse(rotator.dataset.phrases); } catch { return; }
+    if (!line || !phraseEl || !phrases || phrases.length < 2) return;
+
+    const interval = Number(rotator.dataset.interval) || 3000;
+    const offset = Number(rotator.dataset.offset) || 0;
+    const colorStart = Number(rotator.dataset.colorStart) || 0;
+    const prefix = line.firstChild.textContent; // e.g. "Made for "
+
+    // Invisible copies of every version reserve the tallest height.
+    phrases.forEach(p => {
+      const ghost = document.createElement('span');
+      ghost.className = 'rotator-ghost';
+      ghost.setAttribute('aria-hidden', 'true');
+      ghost.textContent = prefix + p;
+      rotator.append(ghost);
+    });
+
+    let index = 0;
+    let colorIndex = colorStart % PHRASE_COLORS.length;
+    // Step to the next colour, skipping any another line is showing right
+    // now, so the two lines never wear the same colour at once.
+    const nextColor = () => {
+      const inUse = new Set(
+        [...document.querySelectorAll('.rotator-phrase')]
+          .filter(el => el !== phraseEl)
+          .map(el => el.dataset.color)
+      );
+      do {
+        colorIndex = (colorIndex + 1) % PHRASE_COLORS.length;
+      } while (inUse.has(PHRASE_COLORS[colorIndex]) && inUse.size < PHRASE_COLORS.length);
+      return PHRASE_COLORS[colorIndex];
+    };
+    const setColor = c => { phraseEl.style.color = c; phraseEl.dataset.color = c; };
+    renderPhrase(phraseEl, phrases[0]);
+    setColor(PHRASE_COLORS[colorIndex]);
+
+    function next() {
+      if (document.hidden) return; // don't churn in a background tab
+      index = (index + 1) % phrases.length;
+      const swap = () => {
+        renderPhrase(phraseEl, phrases[index]);
+        setColor(nextColor());
+        phraseEl.classList.remove('is-out');
+        phraseEl.classList.remove('is-in');
+        void phraseEl.offsetWidth; // restart the in-animation
+        phraseEl.classList.add('is-in');
+      };
+      if (reduceMotion.matches) { swap(); return; }
+      phraseEl.classList.remove('is-in');
+      phraseEl.classList.add('is-out');
+      setTimeout(swap, OUT_MS);
+    }
+
+    setTimeout(() => {
+      next();
+      setInterval(next, interval);
+    }, interval + offset);
+  });
+})();
 
 // ── Footer year ───────────────────────────────────────────
 (function initYear() {
